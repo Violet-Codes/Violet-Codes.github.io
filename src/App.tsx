@@ -1,17 +1,23 @@
-<!DOCTYPE html lang="en">
-<html>
-    <head>
-        <title>Violet-Codes</title>
-    </head>
-    <body>
+import React from 'react';
+
+
+function App() {
+  return (
+    <div className="App">
+      <header className="App-header">
         <h1>
           Hi there! 👋
         </h1>
+      </header>
+      <main>
         <p>
           I am a self-taught developer with an affinity for mathematics and its applications in development.
           I program mainly in Haskell, Rust, and Python.
           I excel at learning and applying design patterns such as Composition, Dependency Injection and Mutability Safety.
         </p>
-        <!-- <noscript>This page requires JavaScript.</noscript> -->
-    </body>
-</html>
+      </main>
+    </div>
+  );
+}
+
+export default App;
