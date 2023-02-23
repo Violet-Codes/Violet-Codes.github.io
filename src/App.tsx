@@ -1,5 +1,5 @@
 import React from 'react';
-
+import {Counter} from './Counter';
 
 function App() {
   return (
@@ -15,6 +15,7 @@ function App() {
           I program mainly in Haskell, Rust, and Python.
           I excel at learning and applying design patterns such as Composition, Dependency Injection and Mutability Safety.
         </p>
+        <Counter initial={0}/>
       </main>
     </div>
   );
