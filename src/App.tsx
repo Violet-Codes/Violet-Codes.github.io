@@ -1,15 +1,17 @@
 import React from 'react';
-import { Routes, Route, Outlet, Link } from "react-router-dom";
+import { Routes, Route, Outlet, Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Ratio from 'react-bootstrap/Ratio';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
 
+import Pfp from './Pfp';
+
 export const App: React.FC<{}> = (props: {}) => {
   return (
     <>
-      <Nav defaultActiveKey="link-0"  className="justify-content-center text-bg-dark" as="ul">
+      <Nav defaultActiveKey="link-0" className="justify-content-center text-bg-dark" as="ul">
         <Nav.Item as="li">
           <Nav.Link eventKey="link-0">
 						<Link to="/">
@@ -46,10 +48,23 @@ export const App: React.FC<{}> = (props: {}) => {
 const Hello: React.FC<{}> = (props: {}) => {
   return (
     <>
-      <header className="p-4 mb-4 border-3 border-bottom">
-        <h1>
-          Hi there! 👋
-        </h1>
+      <header>
+	    <Container>
+		  <Row>
+		    <Col>
+			  <Pfp stylised={true}/>
+			</Col>
+			<Col>
+			<Container className="m-0 mb-4 p-4 border-3 border-left text-bg-light rounded">
+					<div className="position-relative top-0 start-50 translate-middle">
+						<h1>
+							Hi there! 👋
+						</h1>
+					</div>
+				</Container>
+			</Col>
+		  </Row>
+		</Container>
       </header>
       <Outlet />
     </>
