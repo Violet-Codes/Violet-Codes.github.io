@@ -1,0 +1,66 @@
+$DARKER: #0c0e14
+$DARK: #181b28
+
+$PURPLE: #9390cf
+$BLUE: #79b3cf
+$CYAN: #79dfc8
+
+$SALMON: #ff98b0
+$ORANGE: #f0bd91
+$YELLOW: #f2ebb8
+
+$LIGHT: #ffffff
+
+$GAP: 20px
+
+@mixin container()
+    display: flex
+
+*
+    padding: 0px
+    border: 0px
+    margin: 0px
+
+html
+    background-color: $DARKER
+    color: $LIGHT
+
+a
+    color: $BLUE
+    &:visited
+        color: $PURPLE
+    &:hover
+        color: $CYAN
+    &:active
+        color: $LIGHT
+
+.app
+    @include container()
+    flex-direction: column
+    align-items: stretch
+
+.content
+    background-color: $DARK
+    padding: $GAP
+
+.navbar
+    @include container()
+    background-color: $DARKER
+    flex-direction: row
+    justify-content: center
+    & > .item
+        padding: $GAP
+
+.extras
+    @include container()
+    background-color: $DARKER
+    flex-direction: row
+    justify-content: center
+
+h1
+    padding-left: $GAP
+    margin-bottom: $GAP
+    border-left: 1px
+
+    border-color: $LIGHT
+    border-style: solid
