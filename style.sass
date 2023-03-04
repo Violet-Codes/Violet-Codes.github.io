@@ -13,17 +13,34 @@ $LIGHT: #ffffff
 
 $GAP: 20px
 
-@mixin container()
-    display: flex
-
 *
     padding: 0px
     border: 0px
     margin: 0px
 
-html
+.darker
     background-color: $DARKER
     color: $LIGHT
+    & *
+        border-color: $LIGHT
+    
+.dark
+    background-color: $DARK
+    color: $LIGHT
+    & *
+        border-color: $LIGHT
+
+.light
+    background-color: $LIGHT
+    color: $DARKER
+    & *
+        border-color: $DARKER
+
+html
+    background-color: $DARKER
+
+body
+    font-family: 'Fira Code', serif, monospace
 
 a
     color: $BLUE
@@ -34,33 +51,78 @@ a
     &:active
         color: $LIGHT
 
+@mixin h-base()
+    padding-left: $GAP
+    margin-bottom: $GAP
+    margin-top: $GAP
+
+h1
+    @include h-base()
+    font-size: xxx-large
+    border-left: $GAP
+    border-style: double
+
+h2
+    @include h-base()
+    font-size: xx-large
+    border-left: 2px
+    border-style: solid
+
+h3
+    @include h-base()
+    font-size: x-large
+    border-left: 2px
+    border-style: dotted
+
+p
+    font-size: large
+
+
 .app
-    @include container()
+    display: flex
     flex-direction: column
     align-items: stretch
 
 .content
-    background-color: $DARK
     padding: $GAP
 
 .navbar
-    @include container()
-    background-color: $DARKER
+    display: flex
     flex-direction: row
     justify-content: center
     & > .item
         padding: $GAP
 
 .extras
-    @include container()
-    background-color: $DARKER
+    display: flex
     flex-direction: row
     justify-content: center
 
-h1
-    padding-left: $GAP
-    margin-bottom: $GAP
-    border-left: 1px
+.row
+    display: flex
+    flex-direction: row
+    align-items: center
+    justify-content: center
 
-    border-color: $LIGHT
+.col
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+
+.nugget
+    max-width: $GAP
+    min-width: $GAP
+    max-height: $GAP
+    min-height: $GAP
+
+.bold
+    color: $SALMON
+    font-weight: bold
+
+.rounded
+    border-radius: $GAP
+
+.bordered
+    border: 2px
     border-style: solid

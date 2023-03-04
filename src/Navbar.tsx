@@ -3,8 +3,11 @@ import { Link } from 'react-router-dom';
 
 export const NavBar: React.FC<{}> = (props: {}) =>
     <header>
-        <div className="navbar">
+        <div className="darker navbar">
             <NavLink to="/">
+                Home
+            </NavLink>
+            <NavLink to="/about/">
                 About
             </NavLink>
             <NavLink to="/err/">
