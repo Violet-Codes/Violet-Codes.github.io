@@ -6,20 +6,36 @@
 .darker {
   background-color: #0c0e14;
   color: #ffffff; }
+  .darker .highlight-block, .darker .action-block {
+    color: #0c0e14; }
   .darker * {
     border-color: #ffffff; }
 
 .dark {
   background-color: #181b28;
   color: #ffffff; }
+  .dark .highlight-block, .dark .action-block {
+    color: #181b28; }
   .dark * {
     border-color: #ffffff; }
 
 .light {
   background-color: #ffffff;
   color: #0c0e14; }
+  .light .highlight-block, .light .action-block {
+    color: #ffffff; }
   .light * {
     border-color: #0c0e14; }
+
+.highlight-block {
+  background-color: #ff98b0; }
+  .highlight-block.hover:hover {
+    background-color: #f0bd91; }
+
+.action-block {
+  background-color: #79b3cf; }
+  .action-block.hover:hover {
+    background-color: #79dfc8; }
 
 html {
   background-color: #0c0e14; }
@@ -28,6 +44,7 @@ body {
   font-family: 'Fira Code', serif, monospace; }
 
 a {
+  text-decoration-line: none;
   color: #79b3cf; }
   a:visited {
     color: #9390cf; }
@@ -68,9 +85,6 @@ p {
   flex-direction: column;
   align-items: stretch; }
 
-.content {
-  padding: 20px; }
-
 .navbar {
   display: flex;
   flex-direction: row;
@@ -95,19 +109,61 @@ p {
   align-items: center;
   justify-content: center; }
 
+.box {
+  display: flex;
+  flex-direction: inherit;
+  align-items: center;
+  justify-content: center; }
+
 .nugget {
   max-width: 20px;
   min-width: 20px;
   max-height: 20px;
   min-height: 20px; }
 
-.bold {
+.highlight {
   color: #ff98b0;
   font-weight: bold; }
+  .highlight.hover:hover {
+    color: #f0bd91; }
+
+.action {
+  color: #79b3cf;
+  font-weight: bold; }
+  .action.hover:hover {
+    color: #79dfc8; }
 
 .rounded {
   border-radius: 20px; }
 
 .bordered {
-  border: 2px;
+  border-left-width: 2px;
+  border-right-width: 2px;
+  border-top-width: 2px;
+  border-bottom-width: 2px;
   border-style: solid; }
+
+.padded {
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px; }
+
+.margined {
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px; }
+
+.stack {
+  display: grid;
+  grid-template-rows: auto;
+  grid-template-columns: auto;
+  gap: 0px; }
+  .stack > * {
+    grid-column: 1;
+    grid-row: 1; }
+
+.material-icons {
+  font-size: larger;
+  vertical-align: bottom; }

@@ -21,20 +21,36 @@ $GAP: 20px
 .darker
     background-color: $DARKER
     color: $LIGHT
+    & .highlight-block, & .action-block
+        color: $DARKER
     & *
         border-color: $LIGHT
     
 .dark
     background-color: $DARK
     color: $LIGHT
+    & .highlight-block, & .action-block
+        color: $DARK
     & *
         border-color: $LIGHT
 
 .light
     background-color: $LIGHT
     color: $DARKER
+    & .highlight-block, & .action-block
+        color: $LIGHT
     & *
         border-color: $DARKER
+
+.highlight-block
+    background-color: $SALMON
+    &.hover:hover
+        background-color: $ORANGE
+
+.action-block
+    background-color: $BLUE
+    &.hover:hover
+        background-color: $CYAN
 
 html
     background-color: $DARKER
@@ -43,6 +59,7 @@ body
     font-family: 'Fira Code', serif, monospace
 
 a
+    text-decoration-line: none
     color: $BLUE
     &:visited
         color: $PURPLE
@@ -83,9 +100,6 @@ p
     flex-direction: column
     align-items: stretch
 
-.content
-    padding: $GAP
-
 .navbar
     display: flex
     flex-direction: row
@@ -110,19 +124,61 @@ p
     align-items: center
     justify-content: center
 
+.box
+    display: flex
+    flex-direction: inherit
+    align-items: center
+    justify-content: center
+
 .nugget
     max-width: $GAP
     min-width: $GAP
     max-height: $GAP
     min-height: $GAP
 
-.bold
+.highlight
     color: $SALMON
     font-weight: bold
+    &.hover:hover
+        color: $ORANGE
+
+.action
+    color: $BLUE
+    font-weight: bold
+    &.hover:hover
+        color: $CYAN
 
 .rounded
     border-radius: $GAP
 
 .bordered
-    border: 2px
+    border-left-width: 2px
+    border-right-width: 2px
+    border-top-width: 2px
+    border-bottom-width: 2px
     border-style: solid
+
+.padded
+    padding-left: $GAP
+    padding-right: $GAP
+    padding-top: $GAP
+    padding-bottom: $GAP
+
+.margined
+    margin-left: $GAP
+    margin-right: $GAP
+    margin-top: $GAP
+    margin-bottom: $GAP
+
+.stack
+    display: grid
+    grid-template-rows: auto
+    grid-template-columns: auto
+    gap: 0px
+    & > *
+        grid-column: 1
+        grid-row: 1
+
+.material-icons
+    font-size: larger
+    vertical-align: bottom

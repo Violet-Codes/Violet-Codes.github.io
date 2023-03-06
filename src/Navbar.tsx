@@ -1,17 +1,18 @@
 import React, {ReactNode} from 'react';
 import { Link } from 'react-router-dom';
+import Icon from './MaterialIcons';
 
 export const NavBar: React.FC<{}> = (props: {}) =>
     <header>
         <div className="darker navbar">
             <NavLink to="/">
-                Home
+                <u>Home</u><Icon icon="home" />
             </NavLink>
             <NavLink to="/about/">
-                About
+                <u>About</u><Icon icon="info" />
             </NavLink>
             <NavLink to="/err/">
-                Err404
+                <u>Err404</u><Icon icon="warning" />
             </NavLink>
         </div>
     </header>

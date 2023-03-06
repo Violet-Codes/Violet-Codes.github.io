@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { SemiRegular, normStyle } from './Util';
 
 type ImagePropT = SemiRegular & {

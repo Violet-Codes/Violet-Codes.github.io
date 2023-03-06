@@ -5,6 +5,8 @@ import Navbar from './Navbar';
 import Extras from './Extras';
 import Image from './Image';
 import Nugget from './Nugget';
+import Icon from './MaterialIcons';
+import Pfp from './Pfp';
 
 import pfpOriginal from './pfpOriginal.png';
 import pfpStylised from './pfpStylisedDarker.png';
@@ -24,54 +26,102 @@ export const App: React.FC<{}> = (props: {}) =>
 
 const Content: React.FC<{}> = (props: {}) =>
     <main>
-        <div className="dark content">
-            <Outlet />
-        </div>
+        <Outlet />
     </main>;
 
 const Home: React.FC<{}> = (props: {}) =>
-    <div className="row" style={{"alignItems": "stretch"}}>
-        <div className="col" style={{"justifyContent": "space-evenly"}}>
-            <Nugget className="rounded bordered" />
-            <Nugget className="rounded bordered" />
+    <div className="col" style={{"alignItems": "stretch"}}>
+        <div className="padded dark row" style={{"alignItems": "stretch"}}>
+            <Pfp stylised={true} />
+            <Nugget />
+            <div className="col" style={{"alignItems": "flex-start"}}>
+                <h1>
+                    Violet-Codes
+                </h1>
+                <p className="highlight">
+                <Icon icon="female" /> Graphics Designer && Developer
+                </p>
+            </div>
         </div>
-        <Nugget />
-        <Image className="rounded bordered" url={pfpStylised} width={320} height={320}/>
-        <Nugget />
-        <div className="col" style={{"alignItems": "flex-start"}}>
-            <h1>
-                Violet-Codes
-            </h1>
-            <p className="bold">
-                Graphics Designer && Developer
-            </p>
+        <div className="col" style={{"alignItems": "stretch"}}>
+            <div className="highlight-block">
+                <Nugget />
+            </div>
+            <div className="padded darker row">
+                <div className="col" style={{"alignItems": "start"}}>
+                    <h2>
+                        About me
+                    </h2>
+                    <p>
+                        I am a self-taught developer with an affinity for mathematics and its applications in development.<br/>
+                        I program mainly in Haskell, Rust, and Python.<br/>
+                        I excel at learning and applying design patterns such as Composition, Dependency Injection and Mutability Safety.
+                    </p>
+                </div>
+            </div>
+            <div className="highlight-block">
+                <Nugget />
+            </div>
+        </div>
+        <div className="padded dark col" style={{"alignItems": "center"}}>
+            <div className="padded rounded bordered margined col" style={{"alignItems": "start", "alignSelf": "start"}}>
+                <h3>
+                    Lorem Ipsum
+                </h3>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br/>
+                    Orci dapibus ultrices in iaculis nunc.
+                </p>
+            </div>
+            <div className="padded rounded bordered margined col" style={{"alignItems": "start", "alignSelf": "end"}}>
+                <h3>
+                    Lorem Ipsum
+                </h3>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br/>
+                    Eu turpis egestas pretium aenean pharetra magna ac placerat.
+                </p>
+            </div>
+            <div className="padded rounded bordered margined col" style={{"alignItems": "start", "alignSelf": "start"}}>
+                <h3>
+                    Lorem Ipsum
+                </h3>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br/>
+                    Viverra mauris in aliquam sem fringilla ut.
+                </p>
+            </div>
         </div>
     </div>;
 
 const AboutMe: React.FC<{}> = (props: {}) =>
-    <div className="col">
-        <div>
-            <h2>
-                Hi there! 👋
-            </h2>
-            <p>
-                I am a self-taught developer with an affinity for mathematics and its applications in development.<br/>
-                I program mainly in Haskell, Rust, and Python.<br/>
-                I excel at learning and applying design patterns such as Composition, Dependency Injection and Mutability Safety.
-            </p>
+    <div className="dark padded">
+        <div className="box">
+            <div>
+                <h2>
+                    Hi there! <Icon icon="waving_hand" />
+                </h2>
+                <p>
+                    I am a self-taught developer with an affinity for mathematics and its applications in development.<br/>
+                    I program mainly in Haskell, Rust, and Python.<br/>
+                    I excel at learning and applying design patterns such as Composition, Dependency Injection and Mutability Safety.
+                </p>
+            </div>
         </div>
     </div>;
 
 const Err404: React.FC<{}> = (props: {}) =>
-    <div className="col">
-        <div>
-            <h3>
-                Error 404!
-            </h3>
-            <p>
-                The page you are looking for does not exist!<br/>
-                Check if your URL is correct.
-            </p>
+    <div className="dark padded">
+        <div className="box">
+            <div>
+                <h3>
+                    Error 404!
+                </h3>
+                <p>
+                    The page you are looking for does not exist!<br/>
+                    Check if your URL is correct.
+                </p>
+            </div>
         </div>
     </div>;
 
