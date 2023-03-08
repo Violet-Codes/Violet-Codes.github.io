@@ -1,15 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Routes, Route, Outlet } from 'react-router-dom';
 
 import Navbar from './Navbar';
 import Extras from './Extras';
-import Image from './Image';
 import Nugget from './Nugget';
 import Icon from './MaterialIcons';
 import Pfp from './Pfp';
-
-import pfpOriginal from './pfpOriginal.png';
-import pfpStylised from './pfpStylisedDarker.png';
+import Dropdown from './Dropdown';
 
 export const App: React.FC<{}> = (props: {}) =>
     <div className="app">
@@ -37,9 +34,9 @@ const Home: React.FC<{}> = (props: {}) =>
             <div className="col" style={{"alignItems": "flex-start"}}>
                 <h1>
                     Violet-Codes
-                </h1>
+                </h1>       
                 <p className="highlight">
-                <Icon icon="female" /> Graphics Designer && Developer
+                    <Icon icon="female" /> Graphics Designer && Developer
                 </p>
             </div>
         </div>
@@ -47,7 +44,7 @@ const Home: React.FC<{}> = (props: {}) =>
             <div className="highlight-block">
                 <Nugget />
             </div>
-            <div className="padded darker row">
+            <div className="padded darker box">
                 <div className="col" style={{"alignItems": "start"}}>
                     <h2>
                         About me
@@ -65,31 +62,55 @@ const Home: React.FC<{}> = (props: {}) =>
         </div>
         <div className="padded dark col" style={{"alignItems": "center"}}>
             <div className="padded rounded bordered margined col" style={{"alignItems": "start", "alignSelf": "start"}}>
-                <h3>
-                    Lorem Ipsum
-                </h3>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br/>
-                    Orci dapibus ultrices in iaculis nunc.
-                </p>
+                <Dropdown Controller={({callback, isVisible}) =>
+                    <div className="row">
+                        <div className="box" onClick={callback}>
+                            <Icon icon={isVisible ? "unfold_less" : "unfold_more"} className="rounded margined hover action-block" style={{"fontSize": "xx-large"}}/>
+                        </div>
+                        <h3>
+                            Lorem Ipsum
+                        </h3>
+                    </div>
+                }>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br/>
+                        Orci dapibus ultrices in iaculis nunc.
+                    </p>
+                </Dropdown>
             </div>
             <div className="padded rounded bordered margined col" style={{"alignItems": "start", "alignSelf": "end"}}>
-                <h3>
-                    Lorem Ipsum
-                </h3>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br/>
-                    Eu turpis egestas pretium aenean pharetra magna ac placerat.
-                </p>
+                <Dropdown Controller={({callback, isVisible}) =>
+                    <div className="row" style={{"alignSelf": "flex-end"}}>
+                        <div className="box" onClick={callback}>
+                            <Icon icon={isVisible ? "unfold_less" : "unfold_more"} className="rounded margined hover action-block" style={{"fontSize": "xx-large"}}/>
+                        </div>
+                        <h3>
+                            Lorem Ipsum
+                        </h3>
+                    </div>
+                }>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br/>
+                        Eu turpis egestas pretium aenean pharetra magna ac placerat.
+                    </p>
+                </Dropdown>
             </div>
             <div className="padded rounded bordered margined col" style={{"alignItems": "start", "alignSelf": "start"}}>
-                <h3>
-                    Lorem Ipsum
-                </h3>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br/>
-                    Viverra mauris in aliquam sem fringilla ut.
-                </p>
+                <Dropdown Controller={({callback, isVisible}) =>
+                    <div className="row">
+                        <div className="box" onClick={callback}>
+                            <Icon icon={isVisible ? "unfold_less" : "unfold_more"} className="rounded margined hover action-block" style={{"fontSize": "xx-large"}}/>
+                        </div>
+                        <h3>
+                            Lorem Ipsum
+                        </h3>
+                    </div>
+                }>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br/>
+                        Viverra mauris in aliquam sem fringilla ut.
+                    </p>
+                </Dropdown>
             </div>
         </div>
     </div>;
