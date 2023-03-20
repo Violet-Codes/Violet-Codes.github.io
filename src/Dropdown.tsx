@@ -1,17 +1,32 @@
 import React, { useState, ReactNode } from 'react';
+import { useSpring, animated } from 'react-spring';
+import { useMeasure } from 'react-use';
+import { Regular, normChildren, normClassName, normStyle } from './Util';
 
-type DropdownPropT = {
+type DropdownPropT = Regular & {
     Controller: React.FC<{callback: () => void, isVisible: boolean}>;
-    children?: ReactNode | ReactNode[];
     visible?: boolean;
 };
 
-export const Dropdown: React.FC<DropdownPropT> = ({Controller, children, visible}: DropdownPropT) => {
+export const Dropdown: React.FC<DropdownPropT> = ({Controller, children, className, style, visible}: DropdownPropT) => {
+    const [measureRef, dims] = useMeasure<HTMLDivElement>();
     const [isVisible, setVisibility] = useState(visible || false);
+    console.log(dims.width);
+    const css = useSpring({
+        from: {
+            ...(visible ? { height: dims.height, width: dims.width } : { height: 0, width: 0 }),
+            overflow: "hidden"
+        },
+        to: isVisible ? { height: dims.height, width: dims.width } : { height: 0, width: 0 }
+    });
     return (
         <>
             <Controller callback={() => setVisibility(!isVisible)} isVisible={isVisible}/>
-            { isVisible && children }
+            <animated.div style={css}>
+                <div ref={measureRef} style={{width: "fit-content", height: "fit-content"}}>
+                    { normChildren(children) }
+                </div>
+            </animated.div>
         </>
     );
 };

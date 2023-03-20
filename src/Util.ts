@@ -9,11 +9,11 @@ export type Regular = SemiRegular & {
     children?: ReactNode | ReactNode[];
 };
 
-export const normChildren = (props: Regular): ReactNode[] =>
-    (props.children !== undefined) ? [props.children].flat() : [];
+export const normChildren = (children: undefined | ReactNode | ReactNode[]): ReactNode[] =>
+    (children !== undefined) ? [children].flat() : [];
 
-export const normStyle = (props: SemiRegular): CSSProperties =>
-    (props.style !== undefined) ? props.style : {} as CSSProperties;
+export const normStyle = (style: undefined | CSSProperties): CSSProperties =>
+    (style !== undefined) ? style : {} as CSSProperties;
 
-export const normClassName = (props: SemiRegular): string =>
-    (props.className !== undefined) ? props.className : "";
+export const normClassName = (className: undefined | string): string =>
+    (className !== undefined) ? className : "";

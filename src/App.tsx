@@ -51,7 +51,7 @@ const Home: React.FC<{}> = (props: {}) =>
                     </h2>
                     <p>
                         I am a self-taught developer with an affinity for mathematics and its applications in development.<br/>
-                        I program mainly in Haskell, Rust, and Python.<br/>
+                        I program mainly in Haskell, Rust, and TypeScript.<br/>
                         I excel at learning and applying design patterns such as Composition, Dependency Injection and Mutability Safety.
                     </p>
                 </div>
@@ -72,7 +72,7 @@ const Home: React.FC<{}> = (props: {}) =>
                         </h3>
                     </div>
                 }>
-                    <p>
+                    <p style={{width: 800}}>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br/>
                         Orci dapibus ultrices in iaculis nunc.
                     </p>

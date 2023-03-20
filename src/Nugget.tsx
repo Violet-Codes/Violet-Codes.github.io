@@ -1,8 +1,8 @@
 import React from 'react';
 import { SemiRegular, normClassName } from './Util';
 
-export const Nugget: React.FC<SemiRegular> = (props: SemiRegular) =>
-    <div className={`nugget ${normClassName(props)}`.trim()} style={props.style}>
+export const Nugget: React.FC<SemiRegular> = ({className, style}: SemiRegular) =>
+    <div className={`nugget ${normClassName(className)}`.trim()} style={style}>
 
     </div>;
 
