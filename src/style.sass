@@ -183,3 +183,25 @@ p
 .material-icons
     font-size: larger
     vertical-align: bottom
+
+@mixin gradient-text-base()
+    /* Mask the color to the text, and remove the rest  */
+    -webkit-background-clip: text
+    -moz-background-clip: text
+    -ms-background-clip: text
+    -o-background-clip: text
+    background-clip: text
+    /* Make the text fill color value transparent so the masked background color comes through */
+    -webkit-text-fill-color: transparent
+    -moz-text-fill-color: transparent
+    -ms-text-fill-color: transparent
+    -o-text-fill-color: transparent
+    text-fill-color: transparent
+
+.highlight-gradient
+    background: linear-gradient(90deg, $SALMON, $ORANGE 65%, $YELLOW)
+    @include gradient-text-base()
+
+.action-gradient
+    background: linear-gradient(90deg, $BLUE, $CYAN 35%, $YELLOW)
+    @include gradient-text-base()

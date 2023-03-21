@@ -1,7 +1,7 @@
-import React, { useState, ReactNode } from 'react';
+import React, { useState } from 'react';
 import { useSpring, animated } from 'react-spring';
 import { useMeasure } from 'react-use';
-import { Regular, normChildren, normClassName, normStyle } from './Util';
+import { Regular, normChildren } from './Util';
 
 type DropdownPropT = Regular & {
     Controller: React.FC<{callback: () => void, isVisible: boolean}>;

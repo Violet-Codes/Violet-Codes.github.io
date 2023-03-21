@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Routes, Route, Outlet } from 'react-router-dom';
+import React from 'react';
+import { Routes, Route, Outlet, Link } from 'react-router-dom';
 
 import Navbar from './Navbar';
 import Extras from './Extras';
@@ -7,6 +7,7 @@ import Nugget from './Nugget';
 import Icon from './MaterialIcons';
 import Pfp from './Pfp';
 import Dropdown from './Dropdown';
+import Project from './Project';
 
 export const App: React.FC<{}> = (props: {}) =>
     <div className="app">
@@ -14,7 +15,9 @@ export const App: React.FC<{}> = (props: {}) =>
         <Routes>
             <Route path="/" element={<Content />}>
                 <Route path="" element={<Home />} />
-                <Route path="about/" element={<AboutMe />} />
+                <Route path="projects/" element={<Outlet />}>
+                    <Route path="" element={<Projects />} />
+                </Route>
                 <Route path="*" element={<Err404 />} />
             </Route>
         </Routes>
@@ -27,95 +30,101 @@ const Content: React.FC<{}> = (props: {}) =>
     </main>;
 
 const Home: React.FC<{}> = (props: {}) =>
-    <div className="col" style={{"alignItems": "stretch"}}>
-        <div className="padded dark row" style={{"alignItems": "stretch"}}>
-            <Pfp stylised={true} />
-            <Nugget />
-            <div className="col" style={{"alignItems": "flex-start"}}>
-                <h1>
-                    Violet-Codes
-                </h1>       
-                <p className="highlight">
-                    <Icon icon="female" /> Graphics Designer && Developer
-                </p>
-            </div>
-        </div>
-        <div className="col" style={{"alignItems": "stretch"}}>
-            <div className="highlight-block">
-                <Nugget />
-            </div>
-            <div className="padded darker box">
-                <div className="col" style={{"alignItems": "start"}}>
-                    <h2>
-                        About me
-                    </h2>
-                    <p>
-                        I am a self-taught developer with an affinity for mathematics and its applications in development.<br/>
-                        I program mainly in Haskell, Rust, and TypeScript.<br/>
-                        I excel at learning and applying design patterns such as Composition, Dependency Injection and Mutability Safety.
-                    </p>
+    <div className="dark stack">
+        <div className="col" style={{alignItems: "stretch"}}>
+            <Jumbo/>
+            <div className="col" style={{alignItems: "stretch"}}>
+                <div className="padded darker box">
+                    <div className="col" style={{alignItems: "start"}}>
+                        <h2>
+                            About me
+                        </h2>
+                        <p>
+                            I am a self-taught developer with an affinity for mathematics and its applications in development.<br/>
+                            I program mainly in Haskell, Rust, and TypeScript.<br/>
+                            I excel at learning and applying design patterns such as Composition, Dependency Injection and Mutability Safety.
+                        </p>
+                    </div>
                 </div>
             </div>
-            <div className="highlight-block">
-                <Nugget />
-            </div>
-        </div>
-        <div className="padded dark col" style={{"alignItems": "center"}}>
-            <div className="padded rounded bordered margined col" style={{"alignItems": "start", "alignSelf": "start"}}>
-                <Dropdown Controller={({callback, isVisible}) =>
-                    <div className="row">
-                        <div className="box" onClick={callback}>
-                            <Icon icon={isVisible ? "unfold_less" : "unfold_more"} className="rounded margined hover action-block" style={{"fontSize": "xx-large"}}/>
+            <div className="padded col" style={{alignItems: "center"}}>
+                <div className="padded bordered rounded margined col" style={{alignItems: "start", alignSelf: "start"}}>
+                    <Dropdown Controller={({callback, isVisible}) =>
+                        <div className="row">
+                            <div className="box">
+                                <Icon icon={isVisible ? "unfold_less" : "unfold_more"} className="rounded margined hover action-block" style={{fontSize: "xx-large"}} onClick={callback}/>
+                            </div>
+                            <h3>
+                                <Link className="padded" to="/projects/">
+                                    <u>Projects</u>
+                                </Link>
+                            </h3>
                         </div>
-                        <h3>
-                            Lorem Ipsum
-                        </h3>
-                    </div>
-                }>
-                    <p style={{width: 800}}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br/>
-                        Orci dapibus ultrices in iaculis nunc.
-                    </p>
-                </Dropdown>
-            </div>
-            <div className="padded rounded bordered margined col" style={{"alignItems": "start", "alignSelf": "end"}}>
-                <Dropdown Controller={({callback, isVisible}) =>
-                    <div className="row" style={{"alignSelf": "flex-end"}}>
-                        <div className="box" onClick={callback}>
-                            <Icon icon={isVisible ? "unfold_less" : "unfold_more"} className="rounded margined hover action-block" style={{"fontSize": "xx-large"}}/>
+                    }>
+                        <div className="box">
+                            <Project name="example" icon="info"/>
+                            <Project name="brainfuck-optimiser" icon="terminal" interactive/>
+                            <Project name="example" icon="info"/>
                         </div>
-                        <h3>
-                            Lorem Ipsum
-                        </h3>
-                    </div>
-                }>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br/>
-                        Eu turpis egestas pretium aenean pharetra magna ac placerat.
-                    </p>
-                </Dropdown>
-            </div>
-            <div className="padded rounded bordered margined col" style={{"alignItems": "start", "alignSelf": "start"}}>
-                <Dropdown Controller={({callback, isVisible}) =>
-                    <div className="row">
-                        <div className="box" onClick={callback}>
-                            <Icon icon={isVisible ? "unfold_less" : "unfold_more"} className="rounded margined hover action-block" style={{"fontSize": "xx-large"}}/>
+                    </Dropdown>
+                </div>
+                <div className="padded rounded bordered margined col" style={{alignItems: "start", alignSelf: "end"}}>
+                    <Dropdown Controller={({callback, isVisible}) =>
+                        <div className="row" style={{alignSelf: "flex-end"}}>
+                            <div className="box">
+                                <Icon icon={isVisible ? "unfold_less" : "unfold_more"} className="rounded margined hover action-block" style={{fontSize: "xx-large"}} onClick={callback}/>
+                            </div>
+                            <h3>
+                                Lorem Ipsum
+                            </h3>
                         </div>
-                        <h3>
-                            Lorem Ipsum
-                        </h3>
-                    </div>
-                }>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br/>
-                        Viverra mauris in aliquam sem fringilla ut.
-                    </p>
-                </Dropdown>
+                    }>
+                        <p style={{width: 800}}>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br/>
+                            Eu turpis egestas pretium aenean pharetra magna ac placerat.
+                        </p>
+                    </Dropdown>
+                </div>
+                <div className="padded rounded bordered margined col" style={{alignItems: "start", alignSelf: "start"}}>
+                    <Dropdown Controller={({callback, isVisible}) =>
+                        <div className="row">
+                            <div className="box">
+                                <Icon icon={isVisible ? "unfold_less" : "unfold_more"} className="rounded margined hover action-block" style={{fontSize: "xx-large"}} onClick={callback}/>
+                            </div>
+                            <h3>
+                                Lorem Ipsum
+                            </h3>
+                        </div>
+                    }>
+                        <p style={{width: 800}}>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br/>
+                            Viverra mauris in aliquam sem fringilla ut.
+                        </p>
+                    </Dropdown>
+                </div>
             </div>
         </div>
     </div>;
 
-const AboutMe: React.FC<{}> = (props: {}) =>
+const Jumbo: React.FC<{}> = (props: {}) =>
+    <>
+        <Nugget />
+        <div className="padded row" style={{alignItems: "stretch", flexWrap: "wrap"}}>
+            <Pfp stylised={true} />
+            <Nugget />
+            <div className="col" style={{alignItems: "flex-start"}}>
+                <h1>
+                    Violet-Codes
+                </h1>       
+                <p className="highlight highlight-gradient">
+                    <Icon icon="female" /> Graphics Designer && Developer
+                </p>
+            </div>
+        </div>
+        <Nugget />
+    </>;
+
+const Projects: React.FC<{}> = (props: {}) =>
     <div className="dark padded">
         <div className="box">
             <div>
@@ -124,7 +133,7 @@ const AboutMe: React.FC<{}> = (props: {}) =>
                 </h2>
                 <p>
                     I am a self-taught developer with an affinity for mathematics and its applications in development.<br/>
-                    I program mainly in Haskell, Rust, and Python.<br/>
+                    I program mainly in Haskell, Rust, and TypeScript.<br/>
                     I excel at learning and applying design patterns such as Composition, Dependency Injection and Mutability Safety.
                 </p>
             </div>

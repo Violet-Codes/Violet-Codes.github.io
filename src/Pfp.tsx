@@ -14,8 +14,8 @@ export const Pfp: React.FC<PfpPropT> = ({stylised}: PfpPropT) => {
     return (
         <div className="stack">
             <img className="rounded bordered" src={isStylised ? pfpStylised : pfpOriginal} style={{width: 320, height: 320}}/>
-            <div className="box" style={{"justifyContent": "flex-start", "alignItems": "start"}} onClick={() => setStylised(!isStylised)}>
-                <Icon icon={isStylised ? "visibility" : "visibility_off"} className="rounded hover bordered" style={{"fontSize": "xx-large"}}/>
+            <div className="box" style={{justifyContent: "flex-start", alignItems: "start"}}>
+                <Icon icon={isStylised ? "visibility" : "visibility_off"} className="rounded hover bordered" style={{fontSize: "xx-large"}} onClick={() => setStylised(!isStylised)}/>
             </div>
         </div>
     );
