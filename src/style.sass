@@ -19,6 +19,8 @@ $GAP: 20px
     margin: 0px
     transition: background-color 0.5s, color 0.5s
 
+    scrollbar-color: $SALMON $DARKER
+
 .darker
     background-color: $DARKER
     color: $LIGHT
@@ -53,12 +55,9 @@ $GAP: 20px
     &.hover:hover
         background-color: $CYAN
 
-html
-    background-color: $DARKER
-
 body
     font-family: 'Fira Code', serif, monospace
-
+    background-color: $DARKER
 a
     text-decoration-line: none
     color: $BLUE
@@ -133,8 +132,10 @@ p
 
 .nugget
     max-width: $GAP
+    width: $GAP
     min-width: $GAP
     max-height: $GAP
+    height: $GAP
     min-height: $GAP
 
 .highlight
@@ -204,4 +205,12 @@ p
 
 .action-gradient
     background: linear-gradient(90deg, $BLUE, $CYAN 35%, $YELLOW)
+    @include gradient-text-base()
+
+.reverse-highlight-gradient
+    background: linear-gradient(90deg, $YELLOW , $ORANGE 35%, $SALMON)
+    @include gradient-text-base()
+
+.reverse-action-gradient
+    background: linear-gradient(90deg, $YELLOW, $CYAN 65%, $BLUE)
     @include gradient-text-base()

@@ -8,6 +8,7 @@ import Icon from './MaterialIcons';
 import Pfp from './Pfp';
 import Dropdown from './Dropdown';
 import Project from './Project';
+import { useMeasure, useWindowSize } from 'react-use';
 
 export const App: React.FC<{}> = (props: {}) =>
     <div className="app">
@@ -16,7 +17,8 @@ export const App: React.FC<{}> = (props: {}) =>
             <Route path="/" element={<Content />}>
                 <Route path="" element={<Home />} />
                 <Route path="projects/" element={<Outlet />}>
-                    <Route path="" element={<Projects />} />
+                    <Route path="" element={<ProjectsPage />} />
+                    <Route path="*" element={<Err404 />} />
                 </Route>
                 <Route path="*" element={<Err404 />} />
             </Route>
@@ -48,26 +50,7 @@ const Home: React.FC<{}> = (props: {}) =>
                 </div>
             </div>
             <div className="padded col" style={{alignItems: "center"}}>
-                <div className="padded bordered rounded margined col" style={{alignItems: "start", alignSelf: "start"}}>
-                    <Dropdown Controller={({callback, isVisible}) =>
-                        <div className="row">
-                            <div className="box">
-                                <Icon icon={isVisible ? "unfold_less" : "unfold_more"} className="rounded margined hover action-block" style={{fontSize: "xx-large"}} onClick={callback}/>
-                            </div>
-                            <h3>
-                                <Link className="padded" to="/projects/">
-                                    <u>Projects</u>
-                                </Link>
-                            </h3>
-                        </div>
-                    }>
-                        <div className="box">
-                            <Project name="example" icon="info"/>
-                            <Project name="brainfuck-optimiser" icon="terminal" interactive/>
-                            <Project name="example" icon="info"/>
-                        </div>
-                    </Dropdown>
-                </div>
+                <Projects />
                 <div className="padded rounded bordered margined col" style={{alignItems: "start", alignSelf: "end"}}>
                     <Dropdown Controller={({callback, isVisible}) =>
                         <div className="row" style={{alignSelf: "flex-end"}}>
@@ -124,7 +107,55 @@ const Jumbo: React.FC<{}> = (props: {}) =>
         <Nugget />
     </>;
 
-const Projects: React.FC<{}> = (props: {}) =>
+const Projects: React.FC<{}> = (props: {}) => {
+    const [measureRef, dims] = useMeasure<HTMLDivElement>();
+    return (
+        <div className="padded col" style={{alignSelf: "stretch"}}>
+            <div className="row">
+                <div className="reverse-action-gradient">
+                    <Icon icon="star"/>
+                    &#160;&#160;
+                    <Icon icon="magic_button" icontype="material-symbols-outlined"/>
+                    &#160;&#160;&#160;
+                    <Icon icon="auto_awesome" icontype="material-symbols-outlined"/>
+                    &#160;&#160;
+                </div>
+                <Link className="padded" to="/projects/">
+                    <h3>
+                        <u>Projects</u>
+                    </h3>
+                </Link>
+                <div className="action-gradient">
+                    &#160;&#160;&#160;
+                    <Icon icon="star"/>
+                    &#160;&#160;
+                    <Icon icon="auto_awesome" icontype="material-symbols-outlined"/>
+                    &#160;&#160;&#160;
+                    <Icon icon="magic_button" icontype="material-symbols-outlined"/>
+                </div>
+            </div>
+            <div ref={measureRef} className="row" style={{...(dims.width ? {width: dims.width, overflow: "auto"} : {overflow: "hidden"}), justifyContent: "start", alignSelf: "stretch"}}>
+                { dims.width &&
+                    <div className="box">
+                        <Project name="example a" icon="info"/>
+                        <Project name="example b" icon="info"/>
+                        <Project name="example c" icon="info"/>
+                        <Project name="brainfuck-optimiser" icon="terminal" interactive/>
+                        <Project name="example d" icon="info"/>
+                        <Project name="example e" icon="info"/>
+                        <Project name="example f" icon="info"/>
+                        <Project name="example g" icon="info"/>
+                        <Project name="example h" icon="info"/>
+                        <Project name="example i" icon="info"/>
+                        <Project name="example j" icon="info"/>
+                    </div>
+                }
+            </div>
+        </div>
+    );
+};
+
+const ProjectsPage: React.FC<{}> = (props: {}) =>
     <div className="dark padded">
         <div className="box">
             <div>
