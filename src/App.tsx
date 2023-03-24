@@ -8,7 +8,9 @@ import Icon from './MaterialIcons';
 import Pfp from './Pfp';
 import Dropdown from './Dropdown';
 import Project from './Project';
-import { useMeasure, useWindowSize } from 'react-use';
+import { useMeasure } from 'react-use';
+import { animated, useSpring } from 'react-spring';
+import { relative } from 'path';
 
 export const App: React.FC<{}> = (props: {}) =>
     <div className="app">
@@ -51,40 +53,6 @@ const Home: React.FC<{}> = (props: {}) =>
             </div>
             <div className="padded col" style={{alignItems: "center"}}>
                 <Projects />
-                <div className="padded rounded bordered margined col" style={{alignItems: "start", alignSelf: "end"}}>
-                    <Dropdown Controller={({callback, isVisible}) =>
-                        <div className="row" style={{alignSelf: "flex-end"}}>
-                            <div className="box">
-                                <Icon icon={isVisible ? "unfold_less" : "unfold_more"} className="rounded margined hover action-block" style={{fontSize: "xx-large"}} onClick={callback}/>
-                            </div>
-                            <h3>
-                                Lorem Ipsum
-                            </h3>
-                        </div>
-                    }>
-                        <p style={{width: 800}}>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br/>
-                            Eu turpis egestas pretium aenean pharetra magna ac placerat.
-                        </p>
-                    </Dropdown>
-                </div>
-                <div className="padded rounded bordered margined col" style={{alignItems: "start", alignSelf: "start"}}>
-                    <Dropdown Controller={({callback, isVisible}) =>
-                        <div className="row">
-                            <div className="box">
-                                <Icon icon={isVisible ? "unfold_less" : "unfold_more"} className="rounded margined hover action-block" style={{fontSize: "xx-large"}} onClick={callback}/>
-                            </div>
-                            <h3>
-                                Lorem Ipsum
-                            </h3>
-                        </div>
-                    }>
-                        <p style={{width: 800}}>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br/>
-                            Viverra mauris in aliquam sem fringilla ut.
-                        </p>
-                    </Dropdown>
-                </div>
             </div>
         </div>
     </div>;
@@ -109,6 +77,16 @@ const Jumbo: React.FC<{}> = (props: {}) =>
 
 const Projects: React.FC<{}> = (props: {}) => {
     const [measureRef, dims] = useMeasure<HTMLDivElement>();
+    const css = useSpring({
+        from: {
+            width: 0,
+            overflow: "auto",
+            justifyContent: "start"
+        },
+        to: {
+            width: dims.width
+        }
+    });
     return (
         <div className="padded col" style={{alignSelf: "stretch"}}>
             <div className="row">
@@ -127,30 +105,27 @@ const Projects: React.FC<{}> = (props: {}) => {
                 </Link>
                 <div className="action-gradient">
                     &#160;&#160;&#160;
-                    <Icon icon="star"/>
+                    <Icon icon="magic_button" icontype="material-symbols-outlined"/>
                     &#160;&#160;
                     <Icon icon="auto_awesome" icontype="material-symbols-outlined"/>
                     &#160;&#160;&#160;
-                    <Icon icon="magic_button" icontype="material-symbols-outlined"/>
+                    <Icon icon="star"/>
                 </div>
             </div>
-            <div ref={measureRef} className="row" style={{...(dims.width ? {width: dims.width, overflow: "auto"} : {overflow: "hidden"}), justifyContent: "start", alignSelf: "stretch"}}>
-                { dims.width &&
-                    <div className="box">
-                        <Project name="example a" icon="info"/>
-                        <Project name="example b" icon="info"/>
-                        <Project name="example c" icon="info"/>
-                        <Project name="brainfuck-optimiser" icon="terminal" interactive/>
-                        <Project name="example d" icon="info"/>
-                        <Project name="example e" icon="info"/>
-                        <Project name="example f" icon="info"/>
-                        <Project name="example g" icon="info"/>
-                        <Project name="example h" icon="info"/>
-                        <Project name="example i" icon="info"/>
-                        <Project name="example j" icon="info"/>
-                    </div>
-                }
-            </div>
+            <div ref={measureRef} style={{alignSelf: "stretch"}}/>
+            <animated.div className="row" style={css}>
+                <Project name="example a" icon="info" desc={["It does stuff,", "very good stuff"]} interactive/>
+                <Project name="example b" icon="info" desc={["It does stuff,", "very good stuff"]}/>
+                <Project name="example c" icon="info" langs={["lang0", "lang1", "lang2"]}/>
+                <Project name="brainfuck-optimiser" icon="terminal" desc={["Brainfuck...", "...fucks the brain"]} langs={["lang0", "lang1", "lang2"]} interactive/>
+                <Project name="example d" icon="info"/>
+                <Project name="example e" icon="info" desc={["It does stuff,", "very good stuff"]} langs={["lang0", "lang1", "lang2"]}/>
+                <Project name="example f" icon="info" langs={["lang0", "lang1", "lang2"]} interactive/>
+                <Project name="example g" icon="info" desc={["It does stuff,", "very good stuff"]} interactive/>
+                <Project name="example h" icon="info" langs={["lang0", "lang1", "lang2"]}/>
+                <Project name="example i" icon="info" desc={["It does stuff,", "very good stuff"]}/>
+                <Project name="example j" icon="info" langs={["lang0", "lang1", "lang2"]} interactive/>
+            </animated.div>
         </div>
     );
 };
