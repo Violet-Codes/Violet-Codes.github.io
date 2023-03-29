@@ -56,8 +56,9 @@ $GAP: 20px
         background-color: $CYAN
 
 body
-    font-family: 'Fira Code', serif, monospace
     background-color: $DARKER
+    font-family: 'Fira Code', serif, monospace
+    transition: none
 a
     text-decoration-line: none
     color: $BLUE
@@ -72,6 +73,8 @@ a
     padding-left: $GAP
     margin-bottom: $GAP
     margin-top: $GAP
+    font-family: 'Alkatra', serif
+    font-weight: bold
 
 h1
     @include h-base()
@@ -104,10 +107,12 @@ input
     background-color: transparent
     color: inherit
     flex: 1
+    font-family: 'Fira Code', serif, monospace
+    font-size: large
     &:focus
         outline: none
-
-
+    &:disabled
+        background-color: $DARKER
 
 .app
     display: flex
