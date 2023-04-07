@@ -5,11 +5,6 @@ import { Octokit } from "octokit";
 
 const octokit = new Octokit();
 
-octokit.rest.repos.get({
-    owner: "Violet-Codes",
-    repo: "Violet-Codes.github.io"
-}).then(repo => repo.data.stargazers_count).catch(err => 0).then(stars => console.log(stars))
-
 type ProjectPropT = {
     name: string;
     icon: string;
@@ -42,16 +37,16 @@ export const Project: React.FC<ProjectPropT> = ({name, icon, icontype, interacti
             </div>
             &#160;
             { tools && <div className="spaced row">
-                { tools.map((tool) =>
-                    <p><span style={{fontSize: "smaller"}}>
+                { tools.map((tool, index) =>
+                    <p key={index}><span style={{fontSize: "smaller"}}>
                         <Link className="row" to={`/projects/?lang=${encodeURI(JSON.stringify(tools))}`}>
                             <Icon style={{fontSize: "smaller"}} icon="fiber_manual_record" icontype="material-symbols-outlined"/><u>{tool}</u>
                         </Link>
                     </span></p>
                 ) }
             </div> }
-            { desc && desc.map((line) =>
-                <p style={{whiteSpace: "nowrap"}}>
+            { desc && desc.map((line, index) =>
+                <p key={index} style={{whiteSpace: "nowrap"}}>
                     {line}
                 </p>
             ) }

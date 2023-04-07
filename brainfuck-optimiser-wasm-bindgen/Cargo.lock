@@ -5,7 +5,7 @@ version = 3
 [[package]]
 name = "brainfuck-optimiser"
 version = "0.1.0"
-source = "git+https://github.com/Violet-Codes/brainfuck-optimiser#0015c06d247954d76235b6e0c204b6b110d096f3"
+source = "git+https://github.com/Violet-Codes/brainfuck-optimiser#af93028993b37a4899f13302b00115a33b107287"
 dependencies = [
  "nibbler",
 ]
@@ -15,6 +15,7 @@ name = "brainfuck-optimiser-wasm-bindgen"
 version = "0.1.0"
 dependencies = [
  "brainfuck-optimiser",
+ "js-sys",
  "wasm-bindgen",
 ]
 
@@ -29,6 +30,15 @@ name = "cfg-if"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
+
+[[package]]
+name = "js-sys"
+version = "0.3.61"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "445dde2150c55e483f3d8416706b97ec8e8237c307e5b7b4b8dd15e6af2a0730"
+dependencies = [
+ "wasm-bindgen",
+]
 
 [[package]]
 name = "log"
@@ -52,9 +62,9 @@ checksum = "b7e5500299e16ebb147ae15a00a942af264cf3688f47923b8fc2cd5858f23ad3"
 
 [[package]]
 name = "proc-macro2"
-version = "1.0.54"
+version = "1.0.56"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e472a104799c74b514a57226160104aa483546de37e839ec50e3c2e41dd87534"
+checksum = "2b63bdb0cd06f1f4dedf69b254734f9b45af66e4a031e42a7480257d9898b435"
 dependencies = [
  "unicode-ident",
 ]
