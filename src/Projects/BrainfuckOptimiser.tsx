@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import brainfuck_optimiser_init, { wasm_rep } from 'brainfuck-optimiser-wasm-bindgen';
+import brainfuck_optimiser_init, { async_wasm_repl, init_panic_hook } from 'brainfuck-optimiser-wasm-bindgen';
 import Icon from '../MaterialIcons';
 import Nugget from '../Nugget';
 
@@ -11,24 +11,22 @@ function init() {
     is_init = true;
 }
 
-function rep(
-    readln: (s: string) => string,
+async function repl(
+    readln: (s: string) => Promise<string>,
     writeln: (s: string) => void,
     write_errln: (s: string) => void,
     display_help: (s: string) => void,
-    index: number,
     get: (i: number) => number,
     set: (i: number, x: number) => void,
-    ask: () => number,
+    ask: () => Promise<number>,
     put: (x: number) => void,
     clear: () => void
 ) {
-    return wasm_rep(
+    await async_wasm_repl(
         readln,
         writeln,
         write_errln,
         display_help,
-        index,
         get,
         set,
         ask,
@@ -37,83 +35,109 @@ function rep(
     );
 }
 
-interface BFState{
-    index: number;
-    memory: {
-        [key: number]: number
-    }
-}
-
 export const BrainfuckOptimiser: React.FC<{}> = (props: {}) => { 
     useEffect(init, []);
-    const [bfState, setBfState] = useState<BFState>({index: 0, memory: {}});
-    const [state, setState] = useState<{history: JSX.Element[], user_interact: boolean}>({history: [], user_interact: true});
 
-    function append_history(elem: JSX.Element) {
-        state.history = [...state.history, elem];
-        setState({...state});
-    }
+    const [inactive, setInactive] = useState(true);
+    const [history, setHistory] = useState<JSX.Element[]>([]);
+    const [asking, setAsking] = useState(false);
 
-    const ref = useRef<HTMLInputElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
+
     return (
         <div className="padded col" style={{alignItems: "start"}}>
             <h1>
                 Brainfuck Optimiser
             </h1>
-            <p>
-                Type <span className="action">:h</span> for help!
-            </p>
-            <Nugget />
-            { state.history }
-            <div className="row" style={{alignSelf: "stretch"}}>
-                <Icon className="action" icon="start" icontype="material-symbols-outlined"/>&#160;
-                <input ref={ref} disabled={!state.user_interact} onKeyDown={async event => {
-                    if (event.key === 'Enter') {
-                        const cur = ref.current as HTMLInputElement;
-                        const txt = cur.value;
-                        cur.value = "";
+            { inactive ?
+                <div className="padded row hover action" style={{alignSelf: "center"}} onClick={async () => {
+                    init_panic_hook();
+                    setInactive(false);
 
-                        state.history = [...state.history, <PreviousCommand input={txt as string} />];
-                        state.user_interact = false;
-                        setState({...state});
+                    var state = {
+                        head: 0,
+                        memory: {} as {[key: number]: number}
+                    };
 
-                        bfState.index = rep(
-                            s => txt, // readln
-                            s => append_history(<p>{s}</p>), // writeln
-                            s => append_history(<FailedCommand msg={s} />), // write_errln
-                            () => append_history(<HelpText />), // display_help
-                            bfState.index,
-                            i => bfState.memory[Math.round(i)] || 0, // get
-                            (i, x) => { bfState.memory[Math.round(i)] = Math.round(x); }, // set
-                            () => {
-                                const n = Math.round(Number(prompt("input")));
-                                append_history(<Ask val={n} />);
-                                return n;
-                            }, // ask
-                            x => append_history(<Put val={Math.round(x)} />), // put
-                            () => bfState.memory = {} // clear
-                        );
-                        setBfState({index: bfState.index, memory: {...bfState.memory}});
+                    await repl(
+                        s => new Promise(res => {
+                            const inputbox = inputRef.current as HTMLInputElement;
+                            inputbox.disabled = false;
+                            inputbox.onkeydown = event => {
+                                if (event.key === 'Enter') {
+                                    const txt = inputbox.value;
+                                    inputbox.value = "";
+                                    inputbox.disabled = true;
+                                    setHistory(h => [...h, <PreviousCommand input={txt} />])
+                                    res(txt);
+                                }
+                            };
+                        }), // readln
+                        s => setHistory(h => [...h, <p>{s}</p>]), // writeln
+                        s => setHistory(h => [...h, <ErrorMessage msg={s} />]), // write_errln
+                        () => setHistory(h => [...h, <HelpText />]), // display_help
+                        i => state.memory[Math.round(i)] || 0, // get
+                        (i, x) => { state.memory[Math.round(i)] = Math.round(x); }, // set 
+                        () => new Promise(res => {
+                            const inputbox = inputRef.current as HTMLInputElement;
+                            setAsking(true);
+                            inputbox.disabled = false;
+                            inputbox.onkeydown = event => {
+                                if (event.key === 'Enter' && inputbox.validity.valid && inputbox.value) {
+                                    const txt = inputbox.value;
+                                    const n = (new Number(txt)).valueOf();
+                                    inputbox.value = "";
+                                    inputbox.disabled = true;
+                                    setAsking(false);
+                                    setHistory(h => [...h, <Ask input={txt} />])
+                                    res(n);
+                                }
+                            };
+                        }), // ask
+                        x => setHistory(h => [...h, <Put val={Math.round(x)} />]), // put
+                        () => state.memory = {} // clear
+                    );
 
-                        state.user_interact = true;
-                        setState({...state});
-                    }
+                    setHistory([]);
+                    setInactive(true);
                 }}>
-                </input>
-            </div>
+                    <Icon icontype="material-symbols-outlined" icon="terminal" />&#160;<p>Start</p>
+                </div> :
+                <>
+                    <p>
+                        Type <span className="action">:h</span> for help!
+                    </p>
+                    <Nugget />
+                    { history }
+                    <div className="row" style={{alignSelf: "stretch"}}>
+                        {
+                            asking ?
+                                <>
+                                    <Icon icon="arrow_left" icontype="material-symbols-outlined"/>&#160;
+                                        <input type="text" required={true} pattern="(0*(1[0-9][0-9]|2([0-4][0-9]|5[0-5])|[0-9][0-9]|[0-9])|0+)" className="open" ref={inputRef}>
+                                        </input>
+                                </> :
+                                <>
+                                    <Icon className="action" icon="start" icontype="material-symbols-outlined"/>&#160;
+                                        <input type="text" className="boxed" ref={inputRef}>
+                                        </input>
+                                </>
+                        }
+                    </div>
+                </>
+            }
         </div>
     );
 }
 
-const PreviousCommand: React.FC<{input: string}> = (props) => 
-    <div className="row">
+const PreviousCommand: React.FC<{input: string}> = (props) =>
+    <div className="row" style={{alignSelf: "stretch"}}>
         <Icon className="action" icon="arrow_right_alt" icontype="material-symbols-outlined"/>&#160;
-        <p className="action-gradient">
-            {props.input}
-        </p>
-    </div>;
+        <input type="text" readOnly={true} className="open action-gradient" value={props.input}>
+        </input>
+    </div>
 
-const FailedCommand: React.FC<{msg: string}> = (props) =>
+const ErrorMessage: React.FC<{msg: string}> = (props) =>
     <>
         <div className="highlight-gradient">
             { props.msg.split(/\r?\n/).map((line, index) => <p key={index}>{line}</p>) }
@@ -121,12 +145,11 @@ const FailedCommand: React.FC<{msg: string}> = (props) =>
         <Nugget />
     </>;
 
-const Ask: React.FC<{val: number}> = (props) =>
-    <div className="row">
+const Ask: React.FC<{input: string}> = (props) =>
+    <div className="row" style={{alignSelf: "stretch"}}>
         <Icon icon="arrow_left" icontype="material-symbols-outlined"/>&#160;
-        <p>
-            {props.val}
-        </p>
+        <input type="text" readOnly={true} className="open" value={props.input}>
+        </input>
     </div>;
 
 const Put: React.FC<{val: number}> = (props) =>
