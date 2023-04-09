@@ -68,7 +68,7 @@ export const BrainfuckOptimiser: React.FC<{}> = (props: {}) => {
                                     const txt = inputbox.value;
                                     inputbox.value = "";
                                     inputbox.disabled = true;
-                                    setHistory(h => [...h, <PreviousCommand input={txt} />])
+                                    setHistory(h => [...h, <PreviousCommand input={txt} />]);
                                     res(txt);
                                 }
                             };
@@ -89,7 +89,7 @@ export const BrainfuckOptimiser: React.FC<{}> = (props: {}) => {
                                     inputbox.value = "";
                                     inputbox.disabled = true;
                                     setAsking(false);
-                                    setHistory(h => [...h, <Ask input={txt} />])
+                                    setHistory(h => [...h, <Ask input={txt} />]);
                                     res(n);
                                 }
                             };
