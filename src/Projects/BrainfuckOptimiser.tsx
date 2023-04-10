@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useRefState } from '../Util';
+import { useFuture, useRefState } from '../Util';
 import brainfuck_optimiser_init, { async_optimised_wasm_repl, async_wasm_repl, init_panic_hook } from 'brainfuck-optimiser-wasm-bindgen';
 import Icon from '../MaterialIcons';
 import Nugget from '../Nugget';
@@ -69,11 +69,14 @@ export const BrainfuckOptimiser: React.FC<{}> = (props: {}) => {
     useEffect(init, []);
 
     const [displayAsNumber, setDisplayAsNumber, getDisplayAsNumber] = useRefState(true);
-    const [inactive, setInactive] = useState(true);
-    const [history, setHistory] = useState<((b: boolean) => JSX.Element)[]>([]);
-    const [asking, setAsking] = useState(false);
+    const [respondAsk, messageAsk] = useFuture<undefined, number>();
+    const [respondReadLn, messageReadLn] = useFuture<string, string>();
 
-    const inputRef = useRef<HTMLInputElement>(null);
+    const askRef = useRef<HTMLInputElement>(null);
+    const readLnRef = useRef<HTMLInputElement>(null);
+
+    const [inactive, setInactive] = useState(true);
+    const [history, setHistory] = useState<(() => JSX.Element)[]>([]);
 
     return (
         <div className="padded col" style={{alignItems: "start"}}>
@@ -91,52 +94,15 @@ export const BrainfuckOptimiser: React.FC<{}> = (props: {}) => {
                     };
 
                     await optimised_repl(
-                        s => new Promise(res => {
-                            const inputbox = inputRef.current as HTMLInputElement;
-                            inputbox.disabled = false;
-                            inputbox.onkeydown = event => {
-                                if (event.key === 'Enter') {
-                                    const txt = inputbox.value;
-                                    inputbox.value = "";
-                                    inputbox.disabled = true;
-                                    setHistory(h => [...h, dis => <PreviousCommand input={txt} />]);
-                                    res(txt);
-                                }
-                            };
-                        }), // readln
-                        s => setHistory(h => [...h, dis => <p>{s}</p>]), // writeln
-                        s => setHistory(h => [...h, dis => <ErrorMessage msg={s} />]), // write_errln
-                        () => setHistory(h => [...h, dis => <HelpText />]), // display_help
-                        bc => setHistory(h => [...h, bc.trim() ? dis => <OptimisedCode bytecode={bc} /> : dis => <></>]), // display_optimisation
+                        async s => await messageReadLn(s), // readln
+                        s => setHistory(h => [...h, () => <p>{s}</p>]), // writeln
+                        s => setHistory(h => [...h, () => <ErrorMessage msg={s} />]), // write_errln
+                        () => setHistory(h => [...h, () => <HelpText />]), // display_help
+                        bc => setHistory(h => [...h, bc.trim() ? () => <OptimisedCode bytecode={bc} /> : () => <></>]), // display_optimisation
                         i => state.memory[Math.round(i)] || 0, // get
                         (i, x) => { state.memory[Math.round(i)] = Math.round(x); }, // set 
-                        () => new Promise(res => {
-                            const inputbox = inputRef.current as HTMLInputElement;
-                            setAsking(true);
-                            inputbox.disabled = false;
-                            inputbox.onkeydown = event => {
-                                if (event.key === 'Enter' && inputbox.validity.valid && inputbox.value) {
-                                    const txt = inputbox.value;
-                                    const n = (() => {
-                                        if (getDisplayAsNumber()) {
-                                            return (new Number(txt)).valueOf();
-                                        } else {
-                                            if (txt.length == 1) {
-                                                return txt.codePointAt(0) as number;
-                                            } else {
-                                                return (new Number(txt.slice(1))).valueOf();
-                                            }
-                                        }
-                                    })();
-                                    inputbox.value = "";
-                                    inputbox.disabled = true;
-                                    setAsking(false);
-                                    setHistory(h => [...h, dis => <Ask displayAsNumber={dis} val={n} />]);
-                                    res(n);
-                                }
-                            };
-                        }), // ask
-                        x => setHistory(h => [...h, dis => <Put displayAsNumber={dis} val={Math.round(x)} />]), // put
+                        async () => await messageAsk(undefined), // ask
+                        x => setHistory(h => [...h, () => <Put displayAsNumber={getDisplayAsNumber()} val={Math.round(x)} />]), // put
                         () => state.memory = {} // clear
                     );
 
@@ -159,25 +125,49 @@ export const BrainfuckOptimiser: React.FC<{}> = (props: {}) => {
                         </div>
                     </div>
                     <Nugget />
-                    { history.map(f => f(displayAsNumber)) }
+                    { history.map(f => f()) }
+                    { respondAsk &&
+                        <div className="row" style={{alignSelf: "stretch"}}>
+                            <Icon icon="arrow_left" icontype="material-symbols-outlined"/>&#160;
+                            <input type="text" pattern={
+                                displayAsNumber ?
+                                "0*(1[0-9][0-9]|2([0-4][0-9]|5[0-5])|[0-9][0-9]|[0-9])|0+" :
+                                "\\\\(0*(1[0-9][0-9]|2([0-4][0-9]|5[0-5])|[0-9][0-9]|[0-9])|0+)|[!-~]"
+                            } required={true} className="open" ref={askRef} onKeyDown={event => {
+                                const safeAskRef = (askRef.current as HTMLInputElement);
+                                if (event.key === 'Enter' && safeAskRef.validity.valid && safeAskRef.value) {
+                                    const txt = safeAskRef.value;
+                                    const n = (() => {
+                                        if (displayAsNumber) {
+                                            return (new Number(txt)).valueOf();
+                                        } else {
+                                            if (txt.length == 1) {
+                                                return txt.codePointAt(0) as number;
+                                            } else {
+                                                return (new Number(txt.slice(1))).valueOf();
+                                            }
+                                        }
+                                    })();
+                                    safeAskRef.value = "";
+                                    setHistory(h => [...h, () => <Ask displayAsNumber={getDisplayAsNumber()} val={n} />]);
+                                    respondAsk(_ => n);
+                                }
+                            }}>
+                            </input>
+                        </div>
+                    }
                     <div className="row" style={{alignSelf: "stretch"}}>
-                        {
-                            asking ?
-                                <>
-                                    <Icon icon="arrow_left" icontype="material-symbols-outlined"/>&#160;
-                                        <input type="text" pattern={
-                                            displayAsNumber ?
-                                            "0*(1[0-9][0-9]|2([0-4][0-9]|5[0-5])|[0-9][0-9]|[0-9])|0+" :
-                                            "\\\\(0*(1[0-9][0-9]|2([0-4][0-9]|5[0-5])|[0-9][0-9]|[0-9])|0+)|[!-~]"
-                                            } required={true} className="open" ref={inputRef}>
-                                        </input>
-                                </> :
-                                <>
-                                    <Icon className="action" icon="start" icontype="material-symbols-outlined"/>&#160;
-                                        <input type="text" className="boxed" ref={inputRef}>
-                                        </input>
-                                </>
-                        }
+                        <Icon className="action" icon="start" icontype="material-symbols-outlined"/>&#160;
+                        <input type="text" className="boxed" disabled={!respondReadLn} ref={readLnRef} onKeyDown={event => {
+                            const safeReadLnRef = (readLnRef.current as HTMLInputElement);
+                            if (event.key === 'Enter' && respondReadLn) {
+                                const txt = safeReadLnRef.value;
+                                safeReadLnRef.value = "";
+                                setHistory(h => [...h, () => <PreviousCommand input={txt} />]);
+                                respondReadLn(_ => txt);
+                            }
+                        }}>
+                        </input>
                     </div>
                 </>
             }

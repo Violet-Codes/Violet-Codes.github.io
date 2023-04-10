@@ -36,30 +36,29 @@ export function useRefState<S>(initialState: S | (() => S)): [S, React.Dispatch<
     return [state, setState, getState];
 }
 
-export function useFuture<A, B>(): [undefined | ((b: B) => A), (a: A) => Promise<B>] {
-    const [respond, setRespond] = useState<undefined | ((b: B) => A)>(undefined);
+export function useFuture<A, B>(): [undefined | ((f: (a: A) => B) => void), (a: A) => Promise<B>] {
+    const [respond, setRespond] = useState<undefined | ((f: (a: A) => B) => void)>(undefined);
     const message = (a: A) => new Promise<B>(res =>
-        setRespond((_: undefined | ((b: B) => A)) =>
-            (b: B) => {
+        setRespond((_: undefined | ((f: (a: A) => B) => void)) =>
+            (f: (a: A) => B) => {
                 setRespond(undefined);
-                res(b);
-                return a;
+                res(f(a));
             }
         )
     );
     return [respond, message];
 }
 
-export function useQueueFuture<A, B>(): [undefined | ((b: B) => A), (a: A) => Promise<B>] {
-    const queue = useRef<((b: B) => A)[]>([]);
-    const [respond, setRespond] = useState<undefined | ((b: B) => A)>(undefined);
+export function useQueueFuture<A, B>(): [undefined | ((f: (a: A) => B) => void), (a: A) => Promise<B>] {
+    const queue = useRef<((f: (a: A) => B) => void)[]>([]);
+    const [respond, setRespond] = useState<undefined | ((f: (a: A) => B) => void)>(undefined);
     function updateRespond() {
         if (queue) {
-            setRespond((_: undefined | ((b: B) => A)) =>
-                (b: B) => {
-                    const r = queue.current.pop() as (b: B) => A;
+            setRespond((_: undefined | ((f: (a: A) => B) => void)) =>
+                (f: (a: A) => B) => {
+                    const r = queue.current.pop() as ((f: (a: A) => B) => void);
                     updateRespond();
-                    return r(b);
+                    r(f);
                 }
             );
         } else {
@@ -68,9 +67,8 @@ export function useQueueFuture<A, B>(): [undefined | ((b: B) => A), (a: A) => Pr
     }
     const message = (a: A) => new Promise<B>(res => {
         queue.current = [
-            (b: B) => {
-                res(b);
-                return a;
+            (f: (a: A) => B) => {
+                res(f(a));
             },
             ...queue.current
         ];
@@ -79,45 +77,22 @@ export function useQueueFuture<A, B>(): [undefined | ((b: B) => A), (a: A) => Pr
     return [respond, message];
 }
 
-export function useMutualFuture<A, B>(): [(b: B) => Promise<A>, (a: A) => Promise<B>] {
+export function useMutualFuture<A, B>(): [(f: (a: A) => B) => Promise<void>, (a: A) => Promise<B>] {
     const messageQueue = useRef<[A, (b: B | PromiseLike<B>) => void][]>([]);
-    const responseQueue = useRef<[B, (a: A | PromiseLike<A>) => void][]>([]);
+    const responseQueue = useRef<((a: A) => B)[]>([]);
     function tryPair() {
         if (messageQueue && responseQueue) {
-            const [a, resB] = messageQueue.current.pop() as [A, (b: B | PromiseLike<B>) => void];
-            const [b, resA] = responseQueue.current.pop() as [B, (a: A | PromiseLike<A>) => void];
-            resB(b);
-            resA(a);
+            const [a, res] = messageQueue.current.pop() as [A, (b: B | PromiseLike<B>) => void];
+            const f = responseQueue.current.pop() as (a: A) => B;
+            res(f(a));
         }
     }
     const message = (a: A) => new Promise<B>(res => {
         messageQueue.current = [[a, res], ...messageQueue.current];
         tryPair();
     });
-    const respond = (b: B) => new Promise<A>(res => {
-        responseQueue.current = [[b, res], ...responseQueue.current];
-        tryPair();
-    });
-    return [respond, message];
-}
-
-export function makeMutual<A, B>(): [(b: B) => Promise<A>, (a: A) => Promise<B>] {
-    var messageQueue: [A, (b: B | PromiseLike<B>) => void][] = [];
-    var responseQueue: [B, (a: A | PromiseLike<A>) => void][] = [];
-    function tryPair() {
-        if (messageQueue && responseQueue) {
-            const [a, resB] = messageQueue.pop() as [A, (b: B | PromiseLike<B>) => void];
-            const [b, resA] = responseQueue.pop() as [B, (a: A | PromiseLike<A>) => void];
-            resB(b);
-            resA(a);
-        }
-    }
-    const message = (a: A) => new Promise<B>(res => {
-        messageQueue = [[a, res], ...messageQueue];
-        tryPair();
-    });
-    const respond = (b: B) => new Promise<A>(res => {
-        responseQueue = [[b, res], ...responseQueue];
+    const respond = (f: (a: A) => B) => new Promise<void>(res => {
+        responseQueue.current = [(a: A) => { res(undefined); return f(a); }, ...responseQueue.current];
         tryPair();
     });
     return [respond, message];
