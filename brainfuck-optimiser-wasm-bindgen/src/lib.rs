@@ -105,7 +105,7 @@ pub fn optimised_wasm_repl(
         writeln: |s: String| { writeln.call1(& JsValue::NULL, & JsValue::from(s)).unwrap(); },
         write_errln: |s: String| { write_errln.call1(& JsValue::NULL, & JsValue::from(s)).unwrap(); },
         display_help: || { display_help.call0(& JsValue::NULL).unwrap(); },
-        display_optimisation: |bs: & Vec<OptimisedBlock>| { display_optimisation.call1(& JsValue::NULL, & JsValue::from(format!("{bs:?}"))).unwrap(); }
+        display_optimisation: |bs: & Vec<OptimisedBlock>| { display_optimisation.call1(& JsValue::NULL, & JsValue::from(byte_code_pretty(bs))).unwrap(); }
     };
     let mut bfctx = BFCtx{
         index: 0,
@@ -144,7 +144,7 @@ pub async fn async_optimised_wasm_repl(
         writeln: |s: String| { writeln.call1(& JsValue::NULL, & JsValue::from(s)).unwrap(); },
         write_errln: |s: String| { write_errln.call1(& JsValue::NULL, & JsValue::from(s)).unwrap(); },
         display_help: || { display_help.call0(& JsValue::NULL).unwrap(); },
-        display_optimisation: |bs: & Vec<OptimisedBlock>| { display_optimisation.call1(& JsValue::NULL, & JsValue::from(format!("{bs:?}"))).unwrap(); }
+        display_optimisation: |bs: & Vec<OptimisedBlock>| { display_optimisation.call1(& JsValue::NULL, & JsValue::from(byte_code_pretty(bs))).unwrap(); }
     };
     let mut bfctx = AsyncBFCtx{
         index: 0,
