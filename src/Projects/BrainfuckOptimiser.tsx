@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useRefState } from '../Util';
 import brainfuck_optimiser_init, { async_optimised_wasm_repl, async_wasm_repl, init_panic_hook } from 'brainfuck-optimiser-wasm-bindgen';
 import Icon from '../MaterialIcons';
 import Nugget from '../Nugget';
@@ -67,7 +68,7 @@ async function repl(
 export const BrainfuckOptimiser: React.FC<{}> = (props: {}) => { 
     useEffect(init, []);
 
-    const [displayAsNumber, setDisplayAsNumber] = useState(true);
+    const [displayAsNumber, setDisplayAsNumber, getDisplayAsNumber] = useRefState(true);
     const [inactive, setInactive] = useState(true);
     const [history, setHistory] = useState<((b: boolean) => JSX.Element)[]>([]);
     const [asking, setAsking] = useState(false);
@@ -115,14 +116,9 @@ export const BrainfuckOptimiser: React.FC<{}> = (props: {}) => {
                             inputbox.disabled = false;
                             inputbox.onkeydown = event => {
                                 if (event.key === 'Enter' && inputbox.validity.valid && inputbox.value) {
-                                    const dis = (() => {
-                                        let m = undefined;
-                                        setDisplayAsNumber(dis => { m = dis; return dis });
-                                        return m;
-                                    })();
                                     const txt = inputbox.value;
                                     const n = (() => {
-                                        if (dis) {
+                                        if (getDisplayAsNumber()) {
                                             return (new Number(txt)).valueOf();
                                         } else {
                                             if (txt.length == 1) {
