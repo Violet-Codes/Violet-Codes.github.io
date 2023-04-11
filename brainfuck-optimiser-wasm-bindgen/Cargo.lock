@@ -5,7 +5,7 @@ version = 3
 [[package]]
 name = "brainfuck-optimiser"
 version = "0.1.0"
-source = "git+https://github.com/Violet-Codes/brainfuck-optimiser#d5e66ca0277b9a87b34ccf5efd5cc7595189ab2a"
+source = "git+https://github.com/Violet-Codes/brainfuck-optimiser#ca2513680d8494095fcf2c8bf6c52552234d4465"
 dependencies = [
  "nibbler",
 ]

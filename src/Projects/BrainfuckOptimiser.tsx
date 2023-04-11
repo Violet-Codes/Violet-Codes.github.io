@@ -68,19 +68,20 @@ async function repl(
 export const BrainfuckOptimiser: React.FC<{}> = (props: {}) => { 
     useEffect(init, []);
 
-    const [displayAsNumber, setDisplayAsNumber] = useState(true);
+    const [displayAsNumber, setDisplayAsNumber, getDisplayAsNumber] = useRefState(true);
     const [respondAsk, messageAsk] = useFuture<undefined, number>();
     const [respondReadLn, messageReadLn] = useFuture<string, string>();
 
     const askRef = useRef<HTMLInputElement>(null);
     const readLnRef = useRef<HTMLInputElement>(null);
 
-    type HistoryProps = {
-        displayAsNumber: boolean;
-    };
+    useEffect(() => {
+        if (respondAsk) { return (askRef.current as HTMLInputElement).focus(); }
+        if (respondReadLn) { return (readLnRef.current as HTMLInputElement).focus(); }
+    });
 
     const [inactive, setInactive] = useState(true);
-    const [history, setHistory] = useState<(React.FC<HistoryProps>)[]>([]);
+    const [history, setHistory] = useState<React.FC<{}>[]>([]);
 
     return (
         <div className="padded col" style={{alignItems: "start"}}>
@@ -99,14 +100,14 @@ export const BrainfuckOptimiser: React.FC<{}> = (props: {}) => {
 
                     await optimised_repl(
                         async s => await messageReadLn(s), // readln
-                        s => setHistory(h => [...h, props => <p>{s}</p>]), // writeln
-                        s => setHistory(h => [...h, props => <ErrorMessage msg={s} />]), // write_errln
-                        () => setHistory(h => [...h, props => <HelpText />]), // display_help
-                        bc => setHistory(h => [...h, bc.trim() ? props => <OptimisedCode bytecode={bc} /> : props => <></>]), // display_optimisation
+                        s => setHistory(h => [...h, _ => <p>{s}</p>]), // writeln
+                        s => setHistory(h => [...h, _ => <ErrorMessage msg={s} />]), // write_errln
+                        () => setHistory(h => [...h, _ => <HelpText />]), // display_help
+                        bc => setHistory(h => [...h, bc.trim() ? _ => <OptimisedCode bytecode={bc} /> : _ => <></>]), // display_optimisation
                         i => state.memory[Math.round(i)] || 0, // get
                         (i, x) => { state.memory[Math.round(i)] = Math.round(x); }, // set 
                         async () => await messageAsk(undefined), // ask
-                        x => setHistory(h => [...h, props => <Put displayAsNumber={props.displayAsNumber} val={Math.round(x)} />]), // put
+                        x => setHistory(h => [...h, _ => <Put displayAsNumber={getDisplayAsNumber()} val={Math.round(x)} />]), // put
                         () => state.memory = {} // clear
                     );
 
@@ -129,7 +130,7 @@ export const BrainfuckOptimiser: React.FC<{}> = (props: {}) => {
                         </div>
                     </div>
                     <Nugget />
-                    { history.map(Comp => <Comp displayAsNumber={displayAsNumber} />) }
+                    { history.map(Comp => <Comp />) }
                     { respondAsk &&
                         <div className="row" style={{alignSelf: "stretch"}}>
                             <Icon icon="arrow_left" icontype="material-symbols-outlined"/>&#160;
@@ -153,7 +154,7 @@ export const BrainfuckOptimiser: React.FC<{}> = (props: {}) => {
                                         }
                                     })();
                                     safeAskRef.value = "";
-                                    setHistory(h => [...h, props => <Ask displayAsNumber={props.displayAsNumber} val={n} />]);
+                                    setHistory(h => [...h, _ => <Ask displayAsNumber={getDisplayAsNumber()} val={n} />]);
                                     respondAsk(_ => n);
                                 }
                             }}>
@@ -167,7 +168,7 @@ export const BrainfuckOptimiser: React.FC<{}> = (props: {}) => {
                             if (event.key === 'Enter' && respondReadLn) {
                                 const txt = safeReadLnRef.value;
                                 safeReadLnRef.value = "";
-                                setHistory(h => [...h, props => <PreviousCommand input={txt} />]);
+                                setHistory(h => [...h, _ => <PreviousCommand input={txt} />]);
                                 respondReadLn(_ => txt);
                             }
                         }}>

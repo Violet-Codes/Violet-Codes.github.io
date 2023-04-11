@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Outlet } from 'react-router-dom';
+import { Routes, Route, Outlet, useSearchParams, Link } from 'react-router-dom';
 
 import Navbar from './Navbar';
 import Extras from './Extras';
@@ -10,7 +10,7 @@ import { Projects, ProjectsTitle } from './Project';
 import Interactive from './Projects/Interactive';
 import BrainfuckOptimiser from './Projects/BrainfuckOptimiser';
 import VioletCodes from './Projects/VioletCodes';
-import { useMeasure } from 'react-use';
+import { useMeasure, useSearchParam } from 'react-use';
 import { animated, useSpring } from 'react-spring';
 
 export const App: React.FC<{}> = (props: {}) =>
@@ -73,7 +73,7 @@ const Jumbo: React.FC<{}> = (props: {}) =>
                     Violet-Codes
                 </h1>       
                 <p className="highlight highlight-gradient">
-                    <Icon icon="female" /> Graphics Designer && Developer
+                    <Icon icon="female" /> Designer && Developer
                 </p>
             </div>
         </div>
@@ -103,15 +103,30 @@ const ProjectsBlock: React.FC<{}> = (props: {}) => {
     );
 };
 
-const ProjectsPage: React.FC<{}> = (props: {}) =>
-    <div className="dark padded">
-        <div className="col">
-            <ProjectsTitle />
-            <div className="row" style={{flexWrap: "wrap"}}>
-                <Projects />
+const ProjectsPage: React.FC<{}> = (props: {}) => {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const lang_ = searchParams.get("lang");
+    const lang = lang_ ? lang_ : undefined;
+    return (
+        <div className="dark padded">
+            <div className="col">
+                { lang &&
+                    <div className="row" style={{whiteSpace: "nowrap", alignSelf: "start"}}>
+                        <Icon icon="filter_alt" icontype="material-symbols-outlined" />
+                        &#160;<p>{lang}</p>
+                        <Link className="padded row" to="/projects/">
+                            <Icon icon="close" icontype="material-symbols-outlined" />
+                        </Link>
+                    </div>
+                }
+                <ProjectsTitle />
+                <div className="row" style={{flexWrap: "wrap"}}>
+                    <Projects lang={lang} />
+                </div>
             </div>
         </div>
-    </div>;
+    );
+};
 
 const Err404: React.FC<{}> = (props: {}) =>
     <div className="dark padded">

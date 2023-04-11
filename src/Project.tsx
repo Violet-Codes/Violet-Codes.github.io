@@ -10,11 +10,12 @@ type ProjectPropT = {
     icon: string;
     icontype?: "material-icons" | "material-symbols-outlined";
     interactive?: boolean;
-    tools?: string[];
+    langs?: string[];
     desc?: string[];
+    fork?: boolean
 };
 
-export const Project: React.FC<ProjectPropT> = ({name, icon, icontype, interactive, tools, desc}: ProjectPropT) => {
+export const Project: React.FC<ProjectPropT> = ({name, icon, icontype, interactive, langs, desc, fork}: ProjectPropT) => {
     const [stars, setStars] = useState<[number] | null>(null);
     useEffect(() => {
         octokit.rest.repos.get({
@@ -25,22 +26,27 @@ export const Project: React.FC<ProjectPropT> = ({name, icon, icontype, interacti
     return (
         <div className="col rounded bordered padded margined" style={{alignItems: "flex-start", borderTop: "none", borderBottom: "none", order: stars ? -stars[0] : 1}}>
             <div className="row highlight-gradient" style={{whiteSpace: "nowrap"}}>
-                <Icon icon={icon} icontype={icontype}/>&#160;<p>{name}</p>
+                <Icon icon={icon} icontype={icontype}/>&#160;
+                <p>{name}</p>
             </div>
             <div className="spaced row" style={{justifyContent: "space-between", alignSelf: "stretch"}}>
                 <Link className="row" style={{justifySelf: "flex-start"}} to={`https://github.com/Violet-Codes/${name}/`} target="_blank" rel="noopener noreferrer">
                     <Icon icon="code" />&#160;Github
                 </Link>
-                <div style={{whiteSpace: "nowrap"}}>
-                    <Icon icon="star"/><b>{stars ? stars[0] : "..."}</b>
-                </div>
+                { fork ?
+                    <Icon className="rounded bordered" icon="call_split" icontype="material-symbols-outlined" /> :
+                    <div style={{whiteSpace: "nowrap"}}>
+                        <Icon icon="star"/><b>{stars ? stars[0] : "..."}</b>
+                    </div>
+                }
+                
             </div>
             &#160;
-            { tools && <div className="spaced row">
-                { tools.map((tool, index) =>
+            { langs && <div className="spaced row">
+                { langs.map((lang, index) =>
                     <p key={index}><span style={{fontSize: "smaller"}}>
-                        <Link className="row" to={`/projects/?lang=${encodeURI(JSON.stringify(tools))}`}>
-                            <Icon style={{fontSize: "smaller"}} icon="fiber_manual_record" icontype="material-symbols-outlined"/><u>{tool}</u>
+                        <Link className="row" to={`/projects/?lang=${encodeURI(lang)}`}>
+                            <Icon style={{fontSize: "smaller"}} icon="fiber_manual_record" icontype="material-symbols-outlined"/><u>{lang}</u>
                         </Link>
                     </span></p>
                 ) }
@@ -90,19 +96,19 @@ type ProjectsPropT = {
 
 export const Projects: React.FC<ProjectsPropT> = ({lang}: ProjectsPropT) =>
     <>
-        <Project name="Violet-Codes.github.io" icon="web" icontype="material-symbols-outlined" desc={["This portfolio site"]} tools={["typescript", "rust"]} interactive/>
-        <Project name="nibbler" icon="abc" icontype="material-symbols-outlined" desc={["A simple and lightweight", "parser combinator library"]} tools={["rust"]}/>
-        <Project name="brainfuck-optimiser" icon="terminal" desc={["A brainfuck parser", "and optimiser"]} tools={["rust"]} interactive/>
-        {/* <Project name="example a" icon="info" desc={["It does stuff,", "very good stuff"]} interactive/>
-        <Project name="example b" icon="info" desc={["It does stuff,", "very good stuff"]}/>
-        <Project name="example c" icon="info" tools={["lang0", "lang1", "lang2"]}/>
-        <Project name="example d" icon="info"/>
-        <Project name="example e" icon="info" desc={["It does stuff,", "very good stuff"]} tools={["lang0", "lang1", "lang2"]}/>
-        <Project name="example f" icon="info" tools={["lang0", "lang1", "lang2"]} interactive/>
-        <Project name="example g" icon="info" desc={["It does stuff,", "very good stuff"]} interactive/>
-        <Project name="example h" icon="info" tools={["lang0", "lang1", "lang2"]}/>
-        <Project name="example i" icon="info" desc={["It does stuff,", "very good stuff"]}/>
-        <Project name="example j" icon="info" tools={["lang0", "lang1", "lang2"]} interactive/> */}
+        {
+            (!lang || lang == "rust" || lang == "typescript") &&
+            <Project name="Violet-Codes.github.io" icon="web" icontype="material-symbols-outlined" desc={["This portfolio site"]} langs={["typescript", "rust"]} interactive/>
+        }
+        {   (!lang || lang == "rust") &&
+            <Project name="nibbler" icon="abc" icontype="material-symbols-outlined" desc={["A simple and lightweight", "parser combinator library"]} langs={["rust"]}/>
+        }
+        {   (!lang || lang == "rust") &&
+            <Project name="brainfuck-optimiser" icon="terminal" desc={["A brainfuck parser", "with a custom optimised bytecode"]} langs={["rust"]} interactive/>
+        }
+        {   (!lang || lang == "purescript") &&
+            <Project name="purescript-parser" icon="abc" desc={["A parser combinator library", "(fork: error context and branching)"]} langs={["purescript"]} fork/>
+        }
     </>;
 
 export default Project;

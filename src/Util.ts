@@ -31,7 +31,7 @@ export function useCycle(): [number, () => void] {
 export function useRefState<S>(initialState: S | (() => S)): [S, React.Dispatch<React.SetStateAction<S>>, () => S] {
     const [state, setState] = useState<S>(initialState);
     const fresh = useRef<S | undefined>(undefined);
-    useEffect(() => { fresh.current = state; }, [state]);
+    fresh.current = state;
     const getState = () => fresh.current as S;
     return [state, setState, getState];
 }
