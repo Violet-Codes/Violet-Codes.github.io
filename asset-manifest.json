@@ -1,18 +1,18 @@
 {
   "files": {
     "main.css": "/static/css/main.78567a75.css",
-    "main.js": "/static/js/main.fab13ccf.js",
+    "main.js": "/static/js/main.36079b5b.js",
     "static/js/787.1cf30356.chunk.js": "/static/js/787.1cf30356.chunk.js",
     "static/media/brainfuck_optimiser_wasm_bindgen_bg.wasm": "/static/media/brainfuck_optimiser_wasm_bindgen_bg.a689f126a5a485649703.wasm",
     "static/media/pfpDarker.png": "/static/media/pfpDarker.58012b0948d7615217d0.png",
     "static/media/foxlogo.png": "/static/media/foxlogo.b81e4ac086141346e1bb.png",
     "index.html": "/index.html",
     "main.78567a75.css.map": "/static/css/main.78567a75.css.map",
-    "main.fab13ccf.js.map": "/static/js/main.fab13ccf.js.map",
+    "main.36079b5b.js.map": "/static/js/main.36079b5b.js.map",
     "787.1cf30356.chunk.js.map": "/static/js/787.1cf30356.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.78567a75.css",
-    "static/js/main.fab13ccf.js"
+    "static/js/main.36079b5b.js"
   ]
 }
