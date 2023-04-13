@@ -1,4 +1,5 @@
 import React from 'react';
+import Icon from '../MaterialIcons';
 
 export const MonadsForTheLayman: React.FC<{}> = (props: {}) =>
     <div className="uberspaced col" style={{alignItems: "start"}}>
@@ -15,19 +16,19 @@ export const MonadsForTheLayman: React.FC<{}> = (props: {}) =>
             And I think these methods of explanation fail because they to explain what monads <span className="bold">are</span>,<br/>
             instead of first trying to explain their <span className="bold">semantics</span>.<br/>
             <br/>
-            Because monads do not do anything that cannot be done without them.<br/>
-            And I do not mean that in the trivial turing completeness sense.
+            Because monads do not do anything that cannot be done without them,<br/>
+            and I do not mean that in the trivial turing completeness sense.
         </p>
         <p style={{fontSize: "larger"}}>
-            In short: The monad "pattern" is a way to specify a computational side effect with a generic...<br/>
-            Where any such value can be made trivially from a value with no side effect.<br/>
-            So when you apply a function to such a value, you have a result with a side effect.<br/>
-            If the value is a function then you can apply it to a value with a side effect, creating a result with a side effect.<br/>
-            And if you apply a function that creates a side effect to such a value, you will also have a result with a side effect.<br/>
+            The monad pattern is a way to specify a compositional "side effect" with a generic wrapper type where:<br/>
+            <Icon icon="arrow_right" icontype="material-symbols-outlined"/>&#160;The generic can trivially wrap any value.<br/>
+            <Icon icon="arrow_right" icontype="material-symbols-outlined"/>&#160;You can apply a function to such a value, and recieve a wrapped result.<br/>
+            <Icon icon="arrow_right" icontype="material-symbols-outlined"/>&#160;If the wrapped value is itself a function then you can apply it to a wrapped value, recieving a wrapped result.<br/>
+            <Icon icon="arrow_right" icontype="material-symbols-outlined"/>&#160;You can also apply a function that creates wrapped value to a wrapped value, and recieve a wrapped result.<br/>
             <br/>
             These 4 facts above, usually written as the functions "<span className="mono">pure</span>", "<span className="mono">&lt;$&gt;</span>", "<span className="mono">&lt;*&gt;</span>" and "<span className="mono">&gt;&gt;=</span>"<br/>
             are precicely how monads are defined as a trait in languages like Haskell.<br/>
-            In fact - it is these specific things that <span className="bold">make</span> something a side effect in functional terms.<br/>
+            In fact - it is these specific things that <span className="bold">make</span> something a side effect in functional programming.<br/>
             I do not say this to overwhelm anyone, but simply to show that...<br/>
             <span className="bold">that really is all there is to it.</span>
         </p>
@@ -48,9 +49,9 @@ export const MonadsForTheLayman: React.FC<{}> = (props: {}) =>
         </p>
         <p style={{fontSize: "larger"}}>
             This can be done because the behaviour of monads ensures that:<br/>
-            all values can be wrapped in the monad,<br/>
-            all monad values can be combined,<br/>
-            all functions producing more side effects can be applied.<br/>
+            <Icon icon="arrow_right" icontype="material-symbols-outlined"/>&#160;All values can be wrapped in the monad.<br/>
+            <Icon icon="arrow_right" icontype="material-symbols-outlined"/>&#160;All monad values can be combined.<br/>
+            <Icon icon="arrow_right" icontype="material-symbols-outlined"/>&#160;All functions producing more side effects can be applied.<br/>
             <br/>
             This is enough to allow <span className="bold">any</span> procedures state transitions to encorporate the side effects of the monad.<br/>
             If a normal procedure is welded together using the pipe operator "<span className="mono">|</span>"<br/>

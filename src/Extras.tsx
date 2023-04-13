@@ -11,8 +11,11 @@ export const Extras: React.FC<{}> = (props: {}) =>
                 <h3>
                     Accounts:
                 </h3>
-                <a href = "https://github.com/Violet-Codes">
+                <a href="https://github.com/Violet-Codes">
                     <u className="bold">Github</u>
+                </a>
+                <a href="https://www.linkedin.com/in/violet-emmott/">
+                    <u className="bold">LinkedIn</u>
                 </a>
             </div>
             <Nugget />
@@ -24,7 +27,7 @@ export const Extras: React.FC<{}> = (props: {}) =>
             <Nugget />
             <div className="col">
                 Contact me at:
-                <a href = "mailto: vye.codes@gmail.com">
+                <a href="mailto: vye.codes@gmail.com">
                     <u className="bold">vye.codes@gmail.com</u>
                 </a>
             </div>
