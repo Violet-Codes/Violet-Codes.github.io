@@ -6,7 +6,7 @@ import foxlogo from './foxlogo.png';
 
 export const Extras: React.FC<{}> = (props: {}) =>
     <footer>
-        <div className="darker padded spaced row extras">
+        <div className="darker padded spaced row extras" style={{flexWrap: "wrap"}}>
             <div className="col">
                 <h3>
                     Accounts:
@@ -17,12 +17,13 @@ export const Extras: React.FC<{}> = (props: {}) =>
             </div>
             <Nugget />
             <p>
-                All projects listed apart form those explicitly shown as forks<br/>
-                are entirely consist of my own work.
+                All projects listed<br/>
+                (with the exception of forks)<br/>
+                entirely consist of my own work.
             </p>
             <Nugget />
             <div className="col">
-                Contact me at
+                Contact me at:
                 <a href = "mailto: vye.codes@gmail.com">
                     <u className="bold">vye.codes@gmail.com</u>
                 </a>

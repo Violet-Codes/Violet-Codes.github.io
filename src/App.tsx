@@ -12,6 +12,9 @@ import BrainfuckOptimiser from './Projects/BrainfuckOptimiser';
 import VioletCodes from './Projects/VioletCodes';
 import { useMeasure, useSearchParam } from 'react-use';
 import { animated, useSpring } from 'react-spring';
+import { Blogs, BlogsTitle } from './Blog';
+import BlogView from './Blogs/BlogView';
+import { MonadsForTheLayman } from './Blogs/MonadsForTheLayman';
 
 export const App: React.FC<{}> = (props: {}) =>
     <div className="app">
@@ -19,13 +22,20 @@ export const App: React.FC<{}> = (props: {}) =>
         <Routes>
             <Route path="/" element={<Content />}>
                 <Route path="" element={<Home />} />
-                <Route path="projects/" element={<div className="dark"><Outlet /></div>}>
+                <Route path="projects/" element={<Outlet />}>
                     <Route path="interactive/" element={<Interactive />}>
                         <Route path="brainfuck-optimiser" element={<BrainfuckOptimiser />} />
                         <Route path="Violet-Codes.github.io" element={<VioletCodes />} />
                         <Route path="*" element={<ProjectErr404 />} />
                     </Route>
                     <Route path="" element={<ProjectsPage />} />
+                </Route>
+                <Route path="blogs/" element={<Outlet />}>
+                    <Route path="blog/" element={<BlogView />}>
+                        <Route path="Monads-for-the-layman" element={<MonadsForTheLayman />} />
+                        <Route path="*" element={<BlogErr404 />} />
+                    </Route>
+                    <Route path="" element={<BlogsPage />} />
                 </Route>
                 <Route path="*" element={<Err404 />} />
             </Route>
@@ -65,6 +75,11 @@ const Home: React.FC<{}> = (props: {}) =>
                 <ProjectsBlock />
             </div>
         </div>
+        <div>
+            <div className="uberpadded col" style={{alignItems: "center"}}>
+                <BlogsBlock />
+            </div>
+        </div>
     </>;
 
 const Jumbo: React.FC<{}> = (props: {}) =>
@@ -89,7 +104,8 @@ const ProjectsBlock: React.FC<{}> = (props: {}) => {
         from: {
             width: 0,
             overflow: "auto",
-            justifyContent: "start"
+            justifyContent: "start",
+            alignItems: "flex-start"
         },
         to: {
             width: dims.width
@@ -113,7 +129,7 @@ const ProjectsPage: React.FC<{}> = (props: {}) => {
     return (
         <div className="col">
             { lang &&
-                <div className="row" style={{whiteSpace: "nowrap", alignSelf: "start"}}>
+                <div className="row-uberpadded row" style={{whiteSpace: "nowrap", alignSelf: "start"}}>
                     <Icon icon="filter_alt" icontype="material-symbols-outlined" />
                     &#160;<p>{lang}</p>
                     <Link className="padded row" to="/projects/">
@@ -122,12 +138,43 @@ const ProjectsPage: React.FC<{}> = (props: {}) => {
                 </div>
             }
             <ProjectsTitle />
-            <div className="row" style={{flexWrap: "wrap"}}>
+            <div className="row" style={{flexWrap: "wrap", alignItems: "flex-start"}}>
                 <Projects lang={lang} />
             </div>
         </div>
     );
 };
+
+const BlogsBlock: React.FC<{}> = (props: {}) => {
+    const [measureRef, dims] = useMeasure<HTMLDivElement>();
+    const css = useSpring({
+        from: {
+            width: 0,
+            overflow: "auto",
+            justifyContent: "start"
+        },
+        to: {
+            width: dims.width
+        }
+    });
+    return (
+        <div className="col" style={{alignSelf: "stretch"}}>
+            <BlogsTitle />
+            <div ref={measureRef} style={{alignSelf: "stretch"}}/>
+            <animated.div className="row" style={css}>
+                <Blogs />
+            </animated.div>
+        </div>
+    );
+};
+
+const BlogsPage: React.FC<{}> = (props: {}) =>
+    <div className="col">
+        <BlogsTitle />
+        <div className="row" style={{flexWrap: "wrap", alignItems: "flex-start"}}>
+            <Blogs />
+        </div>
+    </div>;
 
 const Err404: React.FC<{}> = (props: {}) =>
     <div className="box">
@@ -137,7 +184,7 @@ const Err404: React.FC<{}> = (props: {}) =>
             </h3>
             <p>
                 The page you are looking for does not exist!<br/>
-                Check if your URL is correct.
+                <span className="bold">Check if your URL is correct.</span>
             </p>
         </div>
     </div>;
@@ -150,7 +197,20 @@ const ProjectErr404: React.FC<{}> = (props: {}) =>
             </h3>
             <p>
                 The project you are looking for does not have an interactive demo!<br/>
-                Check if your URL is correct.
+                <span className="bold">Check if your URL is correct.</span>
+            </p>
+        </div>
+    </div>;
+
+const BlogErr404: React.FC<{}> = (props: {}) =>
+    <div className="box">
+        <div>
+            <h3>
+                Error 404!
+            </h3>
+            <p>
+                The blog you are looking for has not been written! (yet?)<br/>
+                <span className="bold">Check if your URL is correct.</span>
             </p>
         </div>
     </div>;

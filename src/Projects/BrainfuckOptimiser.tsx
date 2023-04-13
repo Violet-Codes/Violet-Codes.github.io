@@ -191,7 +191,7 @@ export const BrainfuckOptimiser: React.FC<{}> = (props: {}) => {
 }
 
 const PreviousCommand: React.FC<{input: string}> = (props) =>
-    <div className="row" style={{alignSelf: "stretch", justifyContent: "flex-start"}}>
+    <div className="row" style={{alignSelf: "stretch", justifyContent: "flex-start", alignItems: "start"}}>
         <Icon className="action" icon="arrow_right_alt" icontype="material-symbols-outlined"/>&#160;
         <p className="mono action-gradient">
             {props.input}

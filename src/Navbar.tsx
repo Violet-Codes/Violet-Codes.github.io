@@ -11,8 +11,8 @@ export const NavBar: React.FC<{}> = (props: {}) =>
             <Link className="bold padded row" to="/projects/">
                 <u>Projects</u><Icon icon="apps" />
             </Link>
-            <Link className="bold padded row" to="/err/">
-                <u>Err404</u><Icon icon="warning" />
+            <Link className="bold padded row" to="/blogs/">
+                <u>Blogs</u><Icon icon="format_quote" icontype="material-symbols-outlined" />
             </Link>
         </div>
     </header>;

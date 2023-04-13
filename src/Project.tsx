@@ -24,7 +24,7 @@ export const Project: React.FC<ProjectPropT> = ({name, icon, icontype, interacti
         }).then(repo => setStars([repo.data.stargazers_count])).catch(console.error)
     }, []);
     return (
-        <div className="col rounded bordered padded margined" style={{alignItems: "flex-start", borderTop: "none", borderBottom: "none", order: stars ? -stars[0] : 1}}>
+        <div className="col rounded bordered padded margined" style={{alignItems: "flex-start", order: stars ? -stars[0] : 1}}>
             <div className="row highlight-gradient" style={{whiteSpace: "nowrap"}}>
                 <Icon icon={icon} icontype={icontype}/>&#160;
                 <p className="bold">{name}</p>
