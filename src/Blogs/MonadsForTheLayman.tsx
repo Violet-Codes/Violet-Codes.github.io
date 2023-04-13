@@ -95,8 +95,8 @@ export const MonadsForTheLayman: React.FC<{}> = (props: {}) =>
                     m a
                 </code><br/>
             </div>
-            This is the generic type <span className="highlight">m</span> over the type <span className="highlight">a</span>,<br/>
-            this is just one example of how Haskells syntax handles expressions with funciton calls,<br/>
+            This is the generic type <span className="highlight">m</span> over the type <span className="highlight">a</span>.<br/>
+            This is just one example of how Haskells syntax handles expressions with funciton calls,<br/>
             which is done with currying semantics, like with the example of type <span className="highlight">a -&gt; (b -&gt; c)</span>.<br/>
             calling that example function with all its inputs at once would look like:<br/>
             <div className="action-gradient mono">
@@ -124,7 +124,7 @@ export const MonadsForTheLayman: React.FC<{}> = (props: {}) =>
             </div>
             This reads that...<br/>
             "<span className="mono">pure</span> can take in any value and wrap it as a value with a side effect.<br/>
-            "<span className="mono">&gt;=&gt;</span>" (the fish operator) can take in two functions that produce side effects<br/>
+            "<span className="mono">&gt;=&gt;</span>" (the fish operator) can take in two functions that produce side effects,<br/>
             and pipe them together into a function that produces a side effect.<br/>
             <br/>
             If there are any two behaviours that concisely describe what monads are entuitively, I would say it is these two functions.
