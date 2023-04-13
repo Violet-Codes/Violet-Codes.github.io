@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useFuture, useRefState } from '../Util';
+import { useFuture, useRefState } from 'time-travel';
 import brainfuck_optimiser_init, { async_optimised_wasm_repl, async_wasm_repl, init_panic_hook } from 'brainfuck-optimiser-wasm-bindgen';
 import Icon from '../MaterialIcons';
 import Nugget from '../Nugget';
@@ -73,11 +73,11 @@ export const BrainfuckOptimiser: React.FC<{}> = (props: {}) => {
     const [respondReadLn, messageReadLn] = useFuture<string, string>();
 
     const askRef = useRef<HTMLInputElement>(null);
-    const readLnRef = useRef<HTMLInputElement>(null);
+    const readLnRef = useRef<HTMLTextAreaElement>(null);
 
     useEffect(() => {
         if (respondAsk) { return (askRef.current as HTMLInputElement).focus(); }
-        if (respondReadLn) { return (readLnRef.current as HTMLInputElement).focus(); }
+        if (respondReadLn) { return (readLnRef.current as HTMLTextAreaElement).focus(); }
     });
 
     const [inactive, setInactive] = useState(true);
@@ -89,7 +89,7 @@ export const BrainfuckOptimiser: React.FC<{}> = (props: {}) => {
                 Brainfuck Optimiser
             </h1>
             { inactive ?
-                <div className="padded row hover action" style={{alignSelf: "start"}} onClick={async () => {
+                <div className="bold padded row hover action" style={{alignSelf: "start"}} onClick={async () => {
                     init_panic_hook();
                     setInactive(false);
 
@@ -118,9 +118,14 @@ export const BrainfuckOptimiser: React.FC<{}> = (props: {}) => {
                 </div> :
                 <>
                     <div className="row" style={{justifyContent: "space-between", alignSelf: "stretch"}}>
-                        <p>
-                            Type <span className="action">:h</span> for help!
-                        </p>
+                        <div className="col" style={{alignItems: "start"}}>
+                            <p>
+                                Press <span className="bold action">[shift]</span> + <span className="bold action">[enter]</span> to parse code.
+                            </p>
+                            <p>
+                                Type <span className="bold action">:h</span> for help!
+                            </p>
+                        </div>
                         <div className="row">
                             <Icon icon="visibility" />
                             <p>
@@ -138,7 +143,7 @@ export const BrainfuckOptimiser: React.FC<{}> = (props: {}) => {
                                 displayAsNumber ?
                                 "0*(1[0-9][0-9]|2([0-4][0-9]|5[0-5])|[0-9][0-9]|[0-9])|0+" :
                                 "\\\\(0*(1[0-9][0-9]|2([0-4][0-9]|5[0-5])|[0-9][0-9]|[0-9])|0+)|[!-~]"
-                            } required={true} className="open" ref={askRef} onKeyDown={event => {
+                            } required={true} className="mono open" ref={askRef} onKeyDown={event => {
                                 const safeAskRef = (askRef.current as HTMLInputElement);
                                 if (event.key === 'Enter' && safeAskRef.validity.valid && safeAskRef.value) {
                                     const txt = safeAskRef.value;
@@ -161,18 +166,23 @@ export const BrainfuckOptimiser: React.FC<{}> = (props: {}) => {
                             </input>
                         </div>
                     }
-                    <div className="row" style={{alignSelf: "stretch"}}>
+                    <div className="row" style={{alignSelf: "stretch", alignItems: "start"}}>
                         <Icon className="action" icon="start" icontype="material-symbols-outlined"/>&#160;
-                        <input type="text" className="boxed" disabled={!respondReadLn} ref={readLnRef} onKeyDown={event => {
-                            const safeReadLnRef = (readLnRef.current as HTMLInputElement);
-                            if (event.key === 'Enter' && respondReadLn) {
-                                const txt = safeReadLnRef.value;
-                                safeReadLnRef.value = "";
-                                setHistory(h => [...h, _ => <PreviousCommand input={txt} />]);
-                                respondReadLn(_ => txt);
-                            }
-                        }}>
-                        </input>
+                        <div className="stack">
+                            <div className="box" style={{justifyContent: "flex-end", alignItems: "end"}}>
+                                <Icon icon="resize" icontype="material-symbols-outlined" className="hover" style={{fontSize: "x-large"}} />
+                            </div>
+                            <textarea className="mono" disabled={!respondReadLn} ref={readLnRef} onKeyDown={event => {
+                                const safeReadLnRef = (readLnRef.current as HTMLTextAreaElement);
+                                if (event.key === 'Enter' && event.shiftKey && respondReadLn) {
+                                    const txt = safeReadLnRef.value;
+                                    safeReadLnRef.value = "";
+                                    setHistory(h => [...h, _ => <PreviousCommand input={txt} />]);
+                                    respondReadLn(_ => txt);
+                                }
+                            }}>
+                            </textarea>
+                        </div>
                     </div>
                 </>
             }
@@ -181,10 +191,11 @@ export const BrainfuckOptimiser: React.FC<{}> = (props: {}) => {
 }
 
 const PreviousCommand: React.FC<{input: string}> = (props) =>
-    <div className="row" style={{alignSelf: "stretch"}}>
+    <div className="row" style={{alignSelf: "stretch", justifyContent: "flex-start"}}>
         <Icon className="action" icon="arrow_right_alt" icontype="material-symbols-outlined"/>&#160;
-        <input type="text" readOnly={true} className="open action-gradient" value={props.input}>
-        </input>
+        <p className="mono action-gradient">
+            {props.input}
+        </p>
     </div>
 
 const OptimisedCode: React.FC<{bytecode: string}> = (props) => {
@@ -200,24 +211,24 @@ const OptimisedCode: React.FC<{bytecode: string}> = (props) => {
         }
     });
     return (
-            <div className="col" style={{alignSelf: "stretch", alignItems: "start"}}>
-                <div ref={measureRef} style={{alignSelf: "stretch"}}/>
-                <Dropdown Controller={ (props) =>
-                    <Icon icontype="material-symbols-outlined" icon={props.isVisible ? "code_off" : "code"} onClick={props.callback} />
-                }>
-                    <animated.div className="row action-gradient" style={css}>
-                        <p style={{whiteSpace: "nowrap"}}>
-                            <pre>{props.bytecode}</pre>
-                        </p>
-                    </animated.div>
-                </Dropdown>
-            </div>
+        <div className="col" style={{alignSelf: "stretch", alignItems: "start"}}>
+            <div ref={measureRef} style={{alignSelf: "stretch"}}/>
+            <Dropdown Controller={ (props) =>
+                <Icon icontype="material-symbols-outlined" icon={props.isVisible ? "code_off" : "code"} onClick={props.callback} />
+            }>
+                <animated.div className="row action-gradient" style={css}>
+                    <p style={{whiteSpace: "nowrap"}}>
+                        <pre>{props.bytecode}</pre>
+                    </p>
+                </animated.div>
+            </Dropdown>
+        </div>
     );
 }
 
 const ErrorMessage: React.FC<{msg: string}> = (props) =>
     <>
-        <div className="highlight-gradient">
+        <div className="mono highlight-gradient">
             { props.msg.split(/\r?\n/).map((line, index) => <p key={index}>{line}</p>) }
         </div>
         <Nugget />
@@ -226,7 +237,7 @@ const ErrorMessage: React.FC<{msg: string}> = (props) =>
 const Ask: React.FC<{val: number, displayAsNumber: boolean}> = (props) =>
     <div className="row">
         <Icon icon="arrow_left" icontype="material-symbols-outlined"/>&#160;
-        <p>
+        <p className="mono">
             {props.displayAsNumber ? props.val : (33 <= props.val && props.val <= 261 ? String.fromCharCode(props.val) : `\\${props.val}`)}
         </p>
     </div>;
@@ -234,7 +245,7 @@ const Ask: React.FC<{val: number, displayAsNumber: boolean}> = (props) =>
 const Put: React.FC<{val: number, displayAsNumber: boolean}> = (props) =>
     <div className="row">
         <Icon icon="arrow_right" icontype="material-symbols-outlined"/>&#160;
-        <p>
+        <p className="mono">
             {props.displayAsNumber ? props.val : (33 <= props.val && props.val <= 261 ? String.fromCharCode(props.val) : `\\${props.val}`)}
         </p>
     </div>;
@@ -242,7 +253,7 @@ const Put: React.FC<{val: number, displayAsNumber: boolean}> = (props) =>
 const HelpText: React.FC<{}> = (props) =>
     <>
         <Nugget />
-        <div className="col" style={{alignItems: "stretch"}}>
+        <div className="mono col" style={{alignItems: "stretch"}}>
             <div className="row" style={{justifyContent: "space-between"}}>
                 <p>
                     <span className="action">:q</span>

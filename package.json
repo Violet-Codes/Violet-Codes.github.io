@@ -19,6 +19,7 @@
     "react-spring": "^9.7.1",
     "react-use": "^17.4.0",
     "sass": "^1.59.3",
+    "time-travel": "https://github.com/Violet-Codes/time-travel",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },

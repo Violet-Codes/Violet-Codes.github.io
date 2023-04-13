@@ -1,24 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import Icon from './MaterialIcons';
 
-import pfpOriginal from './pfpOriginal.png';
-import pfpStylised from './pfpStylisedDarker.png';
+import pfpStylised from './pfpDarker.png';
 
-type PfpPropT = {
-    stylised: boolean;
-};
-
-export const Pfp: React.FC<PfpPropT> = ({stylised}: PfpPropT) => {
-    const [isStylised, setStylised] = useState(stylised);
-    return (
-        <div className="stack">
-            <img className="rounded bordered" src={isStylised ? pfpStylised : pfpOriginal} style={{width: 320, height: 320}}/>
-            <div className="box" style={{justifyContent: "flex-start", alignItems: "start"}}>
-                <Icon icon={isStylised ? "visibility" : "visibility_off"} className="rounded hover bordered" style={{fontSize: "xx-large"}} onClick={() => setStylised(!isStylised)}/>
-            </div>
-        </div>
-    );
-};
+export const Pfp: React.FC<{}> = (props) =>
+    <img className="rounded bordered" src={pfpStylised} style={{width: 480, height: 480}}/>;
 
 export default Pfp;

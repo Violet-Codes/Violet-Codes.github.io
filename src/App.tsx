@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route, Outlet, useSearchParams, Link } from 'react-router-dom';
 
 import Navbar from './Navbar';
-import Extras from './Extras';
+import Extras, { FoxGoodbye } from './Extras';
 import Nugget from './Nugget';
 import Icon from './MaterialIcons';
 import Pfp from './Pfp';
@@ -35,49 +35,52 @@ export const App: React.FC<{}> = (props: {}) =>
 
 const Content: React.FC<{}> = (props: {}) =>
     <main>
-        <Outlet />
+        <div className="dark stack">
+            <div className="uberspaced col-uberpadded col" style={{alignItems: "stretch"}}>
+                <Outlet />
+                <FoxGoodbye />
+            </div>
+        </div>
     </main>;
 
 const Home: React.FC<{}> = (props: {}) =>
-    <div className="dark stack">
+    <>
+        <Jumbo/>
         <div className="col" style={{alignItems: "stretch"}}>
-            <Jumbo/>
-            <div className="col" style={{alignItems: "stretch"}}>
-                <div className="padded darker box">
-                    <div className="col" style={{alignItems: "start"}}>
-                        <h2>
-                            About me
-                        </h2>
-                        <p>
-                            I am a self-taught developer with an affinity for mathematics and its applications in development.<br/>
-                            I program mainly in Haskell, Rust, and TypeScript.<br/>
-                            I excel at learning and applying design patterns such as Composition, Dependency Injection and Mutability Safety.
-                        </p>
-                    </div>
+            <div className="padded darker box">
+                <div className="col" style={{alignItems: "start"}}>
+                    <h2>
+                        About me
+                    </h2>
+                    <p>
+                        I am a self-taught developer with an affinity for mathematics and its applications in development.<br/>
+                        I program mainly in Haskell, Rust, and TypeScript.<br/>
+                        I excel at learning and applying design patterns such as Composition, Dependency Injection and Mutability Safety.
+                    </p>
                 </div>
             </div>
-            <div className="padded col" style={{alignItems: "center"}}>
+        </div>
+        <div>
+            <div className="uberpadded col" style={{alignItems: "center"}}>
                 <ProjectsBlock />
             </div>
         </div>
-    </div>;
+    </>;
 
 const Jumbo: React.FC<{}> = (props: {}) =>
     <>
-        <Nugget />
         <div className="padded row" style={{alignItems: "stretch", flexWrap: "wrap"}}>
-            <Pfp stylised={true} />
+            <Pfp />
             <Nugget />
-            <div className="col" style={{alignItems: "flex-start"}}>
+            <div className="bold col" style={{alignItems: "flex-start"}}>
                 <h1>
                     Violet-Codes
                 </h1>       
-                <p className="highlight highlight-gradient">
+                <p className="highlight highlight-gradient" style={{"fontSize": "larger"}}>
                     <Icon icon="female" /> Designer && Developer
                 </p>
             </div>
         </div>
-        <Nugget />
     </>;
 
 const ProjectsBlock: React.FC<{}> = (props: {}) => {
@@ -93,7 +96,7 @@ const ProjectsBlock: React.FC<{}> = (props: {}) => {
         }
     });
     return (
-        <div className="padded col" style={{alignSelf: "stretch"}}>
+        <div className="col" style={{alignSelf: "stretch"}}>
             <ProjectsTitle />
             <div ref={measureRef} style={{alignSelf: "stretch"}}/>
             <animated.div className="row" style={css}>
@@ -108,53 +111,47 @@ const ProjectsPage: React.FC<{}> = (props: {}) => {
     const lang_ = searchParams.get("lang");
     const lang = lang_ ? lang_ : undefined;
     return (
-        <div className="dark padded">
-            <div className="col">
-                { lang &&
-                    <div className="row" style={{whiteSpace: "nowrap", alignSelf: "start"}}>
-                        <Icon icon="filter_alt" icontype="material-symbols-outlined" />
-                        &#160;<p>{lang}</p>
-                        <Link className="padded row" to="/projects/">
-                            <Icon icon="close" icontype="material-symbols-outlined" />
-                        </Link>
-                    </div>
-                }
-                <ProjectsTitle />
-                <div className="row" style={{flexWrap: "wrap"}}>
-                    <Projects lang={lang} />
+        <div className="col">
+            { lang &&
+                <div className="row" style={{whiteSpace: "nowrap", alignSelf: "start"}}>
+                    <Icon icon="filter_alt" icontype="material-symbols-outlined" />
+                    &#160;<p>{lang}</p>
+                    <Link className="padded row" to="/projects/">
+                        <Icon icon="close" icontype="material-symbols-outlined" />
+                    </Link>
                 </div>
+            }
+            <ProjectsTitle />
+            <div className="row" style={{flexWrap: "wrap"}}>
+                <Projects lang={lang} />
             </div>
         </div>
     );
 };
 
 const Err404: React.FC<{}> = (props: {}) =>
-    <div className="dark padded">
-        <div className="box">
-            <div>
-                <h3>
-                    Error 404!
-                </h3>
-                <p>
-                    The page you are looking for does not exist!<br/>
-                    Check if your URL is correct.
-                </p>
-            </div>
+    <div className="box">
+        <div>
+            <h3>
+                Error 404!
+            </h3>
+            <p>
+                The page you are looking for does not exist!<br/>
+                Check if your URL is correct.
+            </p>
         </div>
     </div>;
 
 const ProjectErr404: React.FC<{}> = (props: {}) =>
-    <div className="dark padded">
-        <div className="box">
-            <div>
-                <h3>
-                    Error 404!
-                </h3>
-                <p>
-                    The project you are looking for does not have an interactive demo!<br/>
-                    Check if your URL is correct.
-                </p>
-            </div>
+    <div className="box">
+        <div>
+            <h3>
+                Error 404!
+            </h3>
+            <p>
+                The project you are looking for does not have an interactive demo!<br/>
+                Check if your URL is correct.
+            </p>
         </div>
     </div>;
 

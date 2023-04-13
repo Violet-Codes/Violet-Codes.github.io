@@ -5,13 +5,13 @@ import Icon from './MaterialIcons';
 export const NavBar: React.FC<{}> = (props: {}) =>
     <header>
         <div className="darker navbar">
-            <Link className="padded row" to="/">
+            <Link className="bold padded row" to="/">
                 <u>Home</u><Icon icon="home" />
             </Link>
-            <Link className="padded row" to="/projects/">
+            <Link className="bold padded row" to="/projects/">
                 <u>Projects</u><Icon icon="apps" />
             </Link>
-            <Link className="padded row" to="/err/">
+            <Link className="bold padded row" to="/err/">
                 <u>Err404</u><Icon icon="warning" />
             </Link>
         </div>

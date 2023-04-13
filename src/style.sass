@@ -1,17 +1,18 @@
-$DARKER: #0c0e14
-$DARK: #181b28
+$DARKER: #000000
+$DARK: #11161f
 
-$PURPLE: #9390cf
-$BLUE: #79b3cf
-$CYAN: #79dfc8
+$PURPLE: #8e1efa
+$BLUE: #5668e9
+$CYAN: #00d96d
 
-$SALMON: #ff98b0
-$ORANGE: #f0bd91
+$SALMON: #de3d82
+$ORANGE: #f8837c
 $YELLOW: #f2ebb8
 
 $LIGHT: #ffffff
 
 $GAP: 20px
+$UBERGAP: 80px
 
 *
     padding: 0px
@@ -55,9 +56,42 @@ $GAP: 20px
     &.hover:hover
         background-color: $CYAN
 
+
+// <link rel="preconnect" href="https://fonts.googleapis.com">
+// <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+// <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:wght@700&family=Montserrat:wght@900&family=Quicksand:wght@300;700&display=swap" rel="stylesheet">
+
+@mixin title()
+    font-family: 'Montserrat', sans-serif // https://fonts.google.com/specimen/Montserrat
+    font-weight: 900
+
+@mixin bold()
+    font-family: 'Quicksand', sans-serif // https://fonts.google.com/specimen/Quicksand
+    font-weight: 700
+
+@mixin regular()
+    font-family: 'Quicksand', sans-serif // https://fonts.google.com/specimen/Quicksand
+    font-weight: 300
+
+@mixin mono()
+    font-family: 'Anonymous Pro', monospace // https://fonts.google.com/specimen/Anonymous+Pro
+    font-weight: 700
+
+.title
+    @include title() 
+
+.bold
+    @include bold()
+
+.regular
+    @include regular()
+    
+.mono
+    @include mono()
+
 body
+    @include regular()
     background-color: $DARKER
-    font-family: 'Fira Code', serif, monospace
     transition: none
 a
     text-decoration-line: none
@@ -68,13 +102,19 @@ a
         color: $CYAN
     &:active
         color: $LIGHT
+    &.action-gradient, &.reverse-action-gradient, &.action
+        &:visited
+            color: $BLUE
+        &:hover
+            color: $CYAN
+        &:active
+            color: $LIGHT
 
 @mixin h-base()
+    @include title()
     padding-left: $GAP
     margin-bottom: $GAP
     margin-top: $GAP
-    font-family: 'Alkatra', serif
-    font-weight: bold
 
 h1
     @include h-base()
@@ -97,37 +137,45 @@ h3
 p
     font-size: large
 
-input.boxed
+u
+    text-decoration-line: underline
+    text-decoration-thickness: 2px
+
+input
+    @include mono()
+    background-color: transparent
+    color: inherit
+    flex: 1
+    font-size: large
+    border-left-width: 0px
+    border-right-width: 0px
+    border-top-width: 0px
+    border-bottom-width: 0px
+    &:focus
+        outline: none
+    &:invalid
+        color: $SALMON
+    &:disabled
+        background-color: $DARKER
+
+textarea
+    @include mono()
+    background-color: transparent
+    color: inherit
+    flex: 1
+    font-size: large
     border-left-width: 2px
     border-right-width: 2px
     border-top-width: 2px
     border-bottom-width: 2px
     border-style: solid
     border-image: linear-gradient(90deg, $BLUE, $CYAN 35%, $YELLOW) 1
-    background-color: transparent
-    color: inherit
-    flex: 1
-    font-family: 'Fira Code', serif, monospace
-    font-size: large
-    &:focus
-        outline: none
-    &:disabled
-        background-color: $DARKER
-
-input.open
-    border-left-width: 0px
-    border-right-width: 0px
-    border-top-width: 0px
-    border-bottom-width: 0px
-    background-color: transparent
-    color: inherit
-    flex: 1
-    font-family: 'Fira Code', serif, monospace
-    font-size: large
     &:focus
         outline: none
     &:invalid
         color: $SALMON
+    &:disabled
+        background-color: $DARKER
 
 .app
     display: flex
@@ -161,6 +209,9 @@ input.open
 .spaced
     gap: $GAP
 
+.uberspaced
+    gap: $UBERGAP
+
 .box
     display: flex
     flex-direction: inherit
@@ -177,13 +228,11 @@ input.open
 
 .highlight
     color: $SALMON
-    font-weight: bold
     &.hover:hover
         color: $ORANGE
 
 .action
     color: $BLUE
-    font-weight: bold
     &.hover:hover
         color: $CYAN
 
@@ -196,6 +245,14 @@ input.open
     border-top-width: 2px
     border-bottom-width: 2px
     border-style: solid
+
+.row-uberpadded
+    padding-left: $UBERGAP
+    padding-right: $UBERGAP
+
+.col-uberpadded
+    padding-top: $UBERGAP
+    padding-bottom: $UBERGAP
 
 .padded
     padding-left: $GAP

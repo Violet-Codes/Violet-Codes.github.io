@@ -27,16 +27,16 @@ export const Project: React.FC<ProjectPropT> = ({name, icon, icontype, interacti
         <div className="col rounded bordered padded margined" style={{alignItems: "flex-start", borderTop: "none", borderBottom: "none", order: stars ? -stars[0] : 1}}>
             <div className="row highlight-gradient" style={{whiteSpace: "nowrap"}}>
                 <Icon icon={icon} icontype={icontype}/>&#160;
-                <p>{name}</p>
+                <p className="bold">{name}</p>
             </div>
             <div className="spaced row" style={{justifyContent: "space-between", alignSelf: "stretch"}}>
                 <Link className="row" style={{justifySelf: "flex-start"}} to={`https://github.com/Violet-Codes/${name}/`} target="_blank" rel="noopener noreferrer">
-                    <Icon icon="code" />&#160;Github
+                    <Icon icon="code" />&#160;<p className="mono">Github</p>
                 </Link>
                 { fork ?
                     <Icon className="rounded bordered" icon="call_split" icontype="material-symbols-outlined" /> :
                     <div style={{whiteSpace: "nowrap"}}>
-                        <Icon icon="star"/><b>{stars ? stars[0] : "..."}</b>
+                        <Icon icon="star"/><b className="bold">{stars ? stars[0] : "..."}</b>
                     </div>
                 }
                 
@@ -45,7 +45,7 @@ export const Project: React.FC<ProjectPropT> = ({name, icon, icontype, interacti
             { langs && <div className="spaced row">
                 { langs.map((lang, index) =>
                     <p key={index}><span style={{fontSize: "smaller"}}>
-                        <Link className="row" to={`/projects/?lang=${encodeURI(lang)}`}>
+                        <Link className="mono row" to={`/projects/?lang=${encodeURI(lang)}`}>
                             <Icon style={{fontSize: "smaller"}} icon="fiber_manual_record" icontype="material-symbols-outlined"/><u>{lang}</u>
                         </Link>
                     </span></p>
@@ -58,7 +58,7 @@ export const Project: React.FC<ProjectPropT> = ({name, icon, icontype, interacti
             ) }
             { interactive && <Link className="row margined action-gradient" style={{alignSelf: "center"}} to={`/projects/interactive/${name}/`}>
                 <Icon icon="auto_awesome" icontype="material-symbols-outlined"/>
-                &#160;<u style={{whiteSpace: "nowrap"}}>Interactive-Demo</u>&#160;
+                &#160;<u className="bold" style={{whiteSpace: "nowrap"}}>Interactive-Demo</u>&#160;
                 <Icon icon="magic_button" icontype="material-symbols-outlined"/>
             </Link> }
         </div>
@@ -75,10 +75,10 @@ export const ProjectsTitle: React.FC<{}> = (props: {}) =>
             <Icon icon="auto_awesome" icontype="material-symbols-outlined"/>
             &#160;&#160;
         </div>
-        <Link className="padded" to="/projects/">
-            <h3>
+        <Link to="/projects/">
+            <h2>
                 <u>Projects</u>
-            </h3>
+            </h2>
         </Link>
         <div className="action-gradient">
             &#160;&#160;&#160;
