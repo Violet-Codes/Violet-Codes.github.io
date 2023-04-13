@@ -194,7 +194,7 @@ const PreviousCommand: React.FC<{input: string}> = (props) =>
     <div className="row" style={{alignSelf: "stretch", justifyContent: "flex-start", alignItems: "start"}}>
         <Icon className="action" icon="arrow_right_alt" icontype="material-symbols-outlined"/>&#160;
         <p className="mono action-gradient">
-            {props.input}
+            <pre>{props.input}</pre>
         </p>
     </div>
 
@@ -214,9 +214,15 @@ const OptimisedCode: React.FC<{bytecode: string}> = (props) => {
         <div className="col" style={{alignSelf: "stretch", alignItems: "start"}}>
             <div ref={measureRef} style={{alignSelf: "stretch"}}/>
             <Dropdown Controller={ (props) =>
-                <Icon icontype="material-symbols-outlined" icon={props.isVisible ? "code_off" : "code"} onClick={props.callback} />
+                <div className="row">
+                    <Icon icon="visibility" />
+                    <p>
+                        &#160;:&#160;
+                    </p>
+                    <Icon className="rounded bordered hover action" icontype="material-symbols-outlined" icon={props.isVisible ? "code" : "code_off"} onClick={props.callback} />
+                </div>
             }>
-                <animated.div className="row action-gradient" style={css}>
+                <animated.div className="mono row action-gradient" style={css}>
                     <p style={{whiteSpace: "nowrap"}}>
                         <pre>{props.bytecode}</pre>
                     </p>
