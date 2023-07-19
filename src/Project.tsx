@@ -106,9 +106,6 @@ export const Projects: React.FC<ProjectsPropT> = ({lang}: ProjectsPropT) =>
         {   (!lang || lang == "rust") &&
             <Project name="brainfuck-optimiser" icon="terminal" desc={["A brainfuck parser", "with a custom optimised bytecode"]} langs={["rust"]} interactive/>
         }
-        {   (!lang || lang == "purescript") &&
-            <Project name="purescript-parser" icon="abc" desc={["A parser combinator library", "(fork: error context and branching)"]} langs={["purescript"]} fork/>
-        }
         {   (!lang || lang == "typescript") &&
             <Project name="time-travel" icon="phishing" icontype="material-symbols-outlined" desc={["React hooks for async communication"]} langs={["typescript"]}/>
         }
